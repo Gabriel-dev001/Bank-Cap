@@ -1,0 +1,90 @@
+# Diretórios do ambiente virtual
+.venv*/
+venv*/
+
+# Arquivos de cache do Python
+__pycache__/
+*.py[cod]
+
+# Diretórios de build e distribuição
+dist/
+build/
+
+# Cobertura de testes
+.coverage*
+htmlcov/
+
+# Configurações de IDEs
+.idea/
+.vscode/
+
+# Tox (ferramenta de testes)
+.tox/
+
+# Documentação gerada automaticamente
+docs/_build/
+
+# Logs e arquivos temporários
+*.log
+*.tmp
+
+# React Native / Expo
+node_modules/*/
+.expo/*
+npm-debug.*
+*.jks
+*.p12
+*.key
+*.mobileprovision
+yarn-error.log
+package-lock.json
+tsconfig.tsbuildinfo
+
+# TypeScript
+*.tsbuildinfo
+
+# Babel
+.babelrc
+.babelrc.js
+babel.config.js
+
+# VSCode
+.vscode/
+
+# macOS
+.DS_Store
+
+# Linux
+*~
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Arquivos de logs
+*.log
+*.out
+
+# Arquivos de build
+dist/
+build/
+
+# Arquivos temporários
+tmp/
+temp/
+
+# Arquivos de configuração pessoal
+*.env
+.env.*
+
+# Expo
+.expo-shared/
+
+# Arquivos de cache
+.cache/
+
+# Arquivos de saída do TypeScript
+*.d.ts
+
+# Pasta Diagramas
+diagramas/
