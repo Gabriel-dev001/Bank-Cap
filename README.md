@@ -7,11 +7,15 @@
 
 # 📸 PRÉVIA DO APLICATIVO  
 
+## 🏠 Tela de Início  
+<img src="docs/screenshots/inicio.png" width="200">  
+
 ## 🔐 Tela de Login  
-![Tela de Login](docs/screenshots/login.png)  
+<img src="docs/screenshots/login.png" width="200">  
 
 ## 📝 Tela de Registro  
-![Tela de Registro](docs/screenshots/registro.png)  
+<img src="docs/screenshots/registro.png" width="200"> 
+
 
 > ⚠️ **O projeto ainda está em desenvolvimento!**  
 > *Novas telas e funcionalidades serão adicionadas em breve.*  
