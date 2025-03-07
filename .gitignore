@@ -87,4 +87,4 @@ temp/
 *.d.ts
 
 # Pasta Diagramas
-Diagramas/
+Diagramas/".env" 

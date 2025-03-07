@@ -14,10 +14,11 @@ def create_app():
     # Inicializa extensões
     db.init_app(app)
     jwt.init_app(app)
-    migrate.init_app(app, db)  # Gerenciador de migrações
+    migrate.init_app(app, db) 
 
     # Registra Blueprints
     app.register_blueprint(usuario_bp, url_prefix="/usuarios") 
     app.register_blueprint(auth_bp, url_prefix="/auth")
+   
 
     return app
