@@ -6,10 +6,11 @@ interface ErrorMessageProps {
 }
 
 const ErrorMessage: React.FC<ErrorMessageProps> = ({ message }) => {
-  if (!message) return null; // Se não houver erro, não renderiza nada
+  if (!message || typeof message !== "string") return null; // Evita renderizar algo inválido
 
-  return <Text style={styles.errorText}>{message}</Text>;
+  return <Text style={styles.errorText}>{message.toString()}</Text>;
 };
+
 
 const styles = StyleSheet.create({
   errorText: {

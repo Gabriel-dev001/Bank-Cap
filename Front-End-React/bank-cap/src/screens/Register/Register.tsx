@@ -11,6 +11,7 @@ import InputText from '../../components/InputText';
 import ErrorMessage from '../../components/ErrorMessage';
 import ButtonTextCenter from '../../components/ButtonTextCenter';
 import StyleRegister from './StyleRegister';
+import { registerApi } from "../../services/authService";
 
 // Definição dos tipos de navegação
 type RootStackParamList = {
@@ -36,51 +37,26 @@ const Register: React.FC<Props> = ({ navigation }) => {
   const [passwordError, setPasswordError] = useState('');
 
   const [generalError, setGeneralError] = useState('');
-
-  async function handleRegister() {
-    if (password !== confirmPassword) {
-      setPasswordError('As senhas não coincidem');
-      return;
-    }
-  
-    if (emailError) {
-      return;
-    }
-  
-    const userData = {
-      nome: name,
-      email,
-      senha: password,
-    };
-  
-    try {
-      const response = await fetch(`${API_BASE_URL}/auth/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userData),
-      });
-  
-      if (!response.ok) {
-        const errorData = await response.json();
-        setGeneralError(errorData.error || 'Erro ao registrar');
+    async function handleRegister() {
+      if (password !== confirmPassword) {
+        setPasswordError("As senhas não coincidem");
         return;
       }
-  
-      const data = await response.json();
-      console.log('Registro bem-sucedido:', data);
-  
-      if (data.usuario && data.usuario.id) {
-        navigation.navigate('Start', { userId: data.usuario.id.toString() });
-      } else {
-        console.error('Erro: ID do usuário não encontrado na resposta da API', data);
-        setGeneralError('Erro ao processar registro.');
+    
+      if (emailError) return;
+    
+      try {
+        const data = await registerApi(name, email, password);
+    
+        if (data.usuario && data.usuario.id) {
+          navigation.navigate("Start", { userId: data.usuario.id.toString() });
+        } else {
+          setGeneralError("Erro ao processar registro.");
+        }
+      } catch (error: any) {
+        setGeneralError(error.message);
       }
-  
-    } catch (error) {
-      console.error('Erro na requisição:', error);
-      setGeneralError('Erro de conexão. Verifique sua internet.');
     }
-  }
   
   function validatePasswordMatch(text: string) {
     setConfirmPassword(text);
@@ -102,7 +78,6 @@ const Register: React.FC<Props> = ({ navigation }) => {
     }
   }
   
-
   return (
     <ImageBackground source={require('../../assets/background.jpg')} style={StyleRegister.background}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
