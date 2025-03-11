@@ -12,6 +12,7 @@ import { Image } from 'react-native';
 import Title from "../../components/Title";
 import SubTitleText from "../../components/SubTitleText";
 import styles from "./StyleMain";
+import GoogleLoginButton from "../../components/GoogleLoginButton";
 
 // Importa os tipos da navegação para manter o código limpo
 type RootStackParamList = {
@@ -40,10 +41,8 @@ const Main: React.FC<NavigationProps<'Main'>> = ({ navigation }) => {
           <Text style={styles.text}>Continuar com Email</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button}>
-          <Image source={require("../../assets/google.png")} style={styles.icon} />
-          <Text style={styles.text}>Continuar com Google</Text>
-        </TouchableOpacity>
+        {/* Lógica do botão ficou na criação do componente */}
+        <GoogleLoginButton />
 
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Register")}>
           <Image source={require("../../assets/lapis.png")} style={styles.icon} />
