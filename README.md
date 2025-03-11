@@ -1,7 +1,7 @@
 # **🏦 BANK CAP - CONTROLE FINANCEIRO**  
 ## 🚧🚀 PROJETO EM DESENVOLVIMENTO  
 
-**Bank Cap** é um aplicativo completo de **gestão financeira para pessoas físicas e jurídicas**, permitindo o controle de **receitas, despesas e investimentos em criptomoedas**.  
+**Bank Cap** é um aplicativo completo de **gestão financeira para pessoas físicas**, permitindo o controle de **receitas, despesas e investimentos em criptomoedas**.  
 
 ---
 
@@ -27,6 +27,7 @@
 ### 🖥️ BACK-END  
 ✅ **Flask (Python)** – API principal  
 ✅ **JWT (JSON Web Token)** – **Autenticação segura**  
+✅ **OAuth 2.0** – **Autenticação com Google**  
 ✅ **MySQL** – **Banco de dados**  
 ✅ **SQLAlchemy** – ORM  
 ✅ **Flask-RESTful** – Organização da API  
@@ -44,8 +45,9 @@
 
 ✅ **JWT (JSON Web Token)** para proteger o acesso ao sistema  
 ✅ **Criptografia de senha** para maior segurança  
-✅ **Proteção de rotas no front-end**  
-⏳ *Próximas melhorias: recuperação de senha e autenticação multifator*  
+✅ **Proteção de rotas no front-end** 
+✅ **OAuth 2.0** – **Autenticação com Google**  
+⏳ *Próximas melhorias: recuperação de senha*  
 
 ---
 
