@@ -35,7 +35,7 @@
 
 ### 📱 FRONT-END  
 ✅ **React Native (Expo + TypeScript)**  
-✅ **Axios** – Consumo de API  
+✅ **Fetch** – Consumo de API  
 ✅ **React Navigation** – Gerenciamento de rotas  
 ✅ **Styled Components** – Estilização  
 
@@ -45,7 +45,8 @@
 
 ✅ **JWT (JSON Web Token)** para proteger o acesso ao sistema  
 ✅ **Criptografia de senha** para maior segurança  
-✅ **Proteção de rotas no front-end** 
+✅ **Proteção de rotas no front-end**
+
 ✅ **OAuth 2.0** – **Autenticação com Google**  
 ⏳ *Próximas melhorias: recuperação de senha*  
 
