@@ -5,6 +5,7 @@ from extensions import db, jwt, migrate
 
 from app.routes.auth_routes import auth_bp
 from app.routes.usuario_routes import usuario_bp
+from app.routes.conta_routes import conta_bp
 
 def create_app():
     app = Flask(__name__)
@@ -19,6 +20,7 @@ def create_app():
     # Registra Blueprints
     app.register_blueprint(usuario_bp, url_prefix="/usuarios") 
     app.register_blueprint(auth_bp, url_prefix="/auth")
+    app.register_blueprint(conta_bp, url_prefix="/contas")
    
 
     return app
