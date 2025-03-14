@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, ImageBackground, StyleSheet } from 'react-native';
+import { View, Text, ImageBackground, StyleSheet, Dimensions } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
+import { ProgressChart } from "react-native-chart-kit";
 import StyleStart from './StyleStart';
 import TopBar from '../../components/TopBar';
 
@@ -22,6 +23,8 @@ type Props = {
   route: StartScreenRouteProp;
 };
 
+
+
 const Start: React.FC<Props> = ({ route }) => {
   const { userId } = route.params; // Pegando o userId passado via navigation
 
@@ -30,7 +33,18 @@ const Start: React.FC<Props> = ({ route }) => {
       <View style={StyleStart.container}>
         <TopBar title={`Usuário: ${userId}`} />
 
-        <Text style={{ color: '#fff', fontSize: 20 }}>Bem-vindo, {userId}, yedy</Text>
+        <View style={StyleStart.saldoContainer}>
+          <Text style={StyleStart.text}>RS: {/* Valor do Saldo Aqui */}</Text>
+          <Text style={StyleStart.text}>Saldo</Text>
+        </View>
+
+      
+
+        <View style={StyleStart.row}>
+          <Text style={StyleStart.text}>Texto 1</Text>
+          <Text style={StyleStart.text}>Texto 2</Text>
+        </View>
+
       </View>
     </ImageBackground>
   );
