@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import Login from '../screens/Login/Login';
 import Main from '../screens/Main/Main';
 import Register from '../screens/Register/Register';
-import Start from '../screens/Start';
+import Start from '../screens/Start/Start';
 
 import { RootStackParamList } from './types'; // Importa os tipos corretamente
 
