@@ -28,7 +28,7 @@ const TopBar = ({ title }: { title: string }) => {
       zIndex: 1000, 
     },
     text: {
-      left: 30,
+      left: 25,
       flex: 1,
       fontSize: 22,
       fontWeight: "bold",
@@ -36,7 +36,7 @@ const TopBar = ({ title }: { title: string }) => {
       textAlign: "center",
     },
     button: {
-      width: 50, // Defina o tamanho do botão
+      width: 50, 
       height: 50,
       alignItems: "center",
       justifyContent: "center",

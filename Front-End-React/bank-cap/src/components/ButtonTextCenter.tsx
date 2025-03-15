@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   textButton: {
-    fontSize: 16, // Um pouco maior para dar destaque
+    fontSize: 16,
     color: '#FFF',
     fontWeight: 'bold',
     textAlign: 'center',

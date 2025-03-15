@@ -1,55 +1,76 @@
-import React from 'react';
-import { View, Text, ImageBackground, StyleSheet, Dimensions } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RouteProp } from '@react-navigation/native';
-import { ProgressChart } from "react-native-chart-kit";
-import StyleStart from './StyleStart';
-import TopBar from '../../components/TopBar';
-
+import React from "react";
+import {
+  View,
+  Text,
+  ImageBackground,
+  TouchableOpacity,
+} from "react-native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RouteProp } from "@react-navigation/native";
+import StyleStart from "./StyleStart";
+import TopBar from "../../components/TopBar";
+import DonutChart from "../../components/DonutChart";
+import LineSeparator from "../../components/LineSeparator";
+import ButtonTextCenter from "../../components/ButtonTextCenter";
 
 // Definição dos tipos de navegação
 type RootStackParamList = {
-  Start: { userId: string }; // Start recebe userId via navigation
+  Start: { userId: string }; 
   Login: undefined;
   Register: undefined;
   Main: undefined;
 };
 
-type StartScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Start'>;
-type StartScreenRouteProp = RouteProp<RootStackParamList, 'Start'>;
+type StartScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  "Start"
+>;
+type StartScreenRouteProp = RouteProp<RootStackParamList, "Start">;
 
 type Props = {
   navigation: StartScreenNavigationProp;
   route: StartScreenRouteProp;
 };
 
-
-
 const Start: React.FC<Props> = ({ route }) => {
   const { userId } = route.params; // Pegando o userId passado via navigation
 
   return (
-    <ImageBackground source={require('../../assets/background.jpg')} style={StyleStart.background}>
-      <View style={StyleStart.container}>
+    <ImageBackground
+      source={require("../../assets/background.jpg")}
+      style={StyleStart.background}
+    >
+      <View style={{ flex: 0, justifyContent: "flex-start", alignItems: "center", paddingTop: 120,}}>
         <TopBar title={`Usuário: ${userId}`} />
+        <DonutChart />{/*Aqui eu vou ter que passar o tanto de receita e de despesa que eu tenho*/}
+      </View>
 
-        <View style={StyleStart.saldoContainer}>
-          <Text style={StyleStart.text}>RS: {/* Valor do Saldo Aqui */}</Text>
-          <Text style={StyleStart.text}>Saldo</Text>
-        </View>
-
-      
+      <View style={StyleStart.container}>
+        <LineSeparator />
 
         <View style={StyleStart.row}>
-          <Text style={StyleStart.text}>Texto 1</Text>
-          <Text style={StyleStart.text}>Texto 2</Text>
+          {/* Coluna Receita */}
+          <View>
+            <TouchableOpacity style={StyleStart.squareGreen} onPress={() => console.log("Botão de Receita pressionado")}>
+              <Text style={StyleStart.textTitlle}>Receitas</Text>
+              <Text style={StyleStart.text}>/*R$: */</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Coluna Despesa */}
+          <View >
+            <TouchableOpacity style={StyleStart.squareRed} onPress={() => console.log("Botão de Despesa pressionado")}>
+              <Text style={StyleStart.textTitlle}>Despesa</Text>
+              <Text style={StyleStart.text}>/*R$: */</Text>
+            </TouchableOpacity>
+          </View>
         </View>
+
+        <ButtonTextCenter title="Suas Contas" onPress={() => {}} />
 
       </View>
     </ImageBackground>
   );
 };
-
-
 
 export default Start;
