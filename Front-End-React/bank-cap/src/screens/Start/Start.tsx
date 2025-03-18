@@ -69,7 +69,8 @@ const Start: React.FC<Props> = ({ route }) => {
 
         <ButtonTextCenter title="Suas Contas" onPress={() => {}} />
 
-        <FloatingButton />
+        {/* Botões redondos*/}
+        <FloatingButton/>
 
       </View>
     </ImageBackground>
