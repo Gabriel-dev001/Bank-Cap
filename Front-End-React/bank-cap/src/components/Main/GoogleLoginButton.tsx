@@ -1,6 +1,6 @@
 import React from "react";
 import { TouchableOpacity, Image, Text, StyleSheet } from "react-native";
-import { googleApi } from "../services/authService";
+import { googleApi } from "../../services/authService";
 
 const GoogleLoginButton: React.FC = () => {
   const { request, promptAsync, handleGoogleLogin } = googleApi();
@@ -16,7 +16,7 @@ const GoogleLoginButton: React.FC = () => {
         }
       }}
     >
-      <Image source={require("../assets/google.png")} style={styles.icon} />
+      <Image source={require("../../assets/google.png")} style={styles.icon} />
       <Text style={styles.text}>Continuar com Google</Text>
     </TouchableOpacity>
   );

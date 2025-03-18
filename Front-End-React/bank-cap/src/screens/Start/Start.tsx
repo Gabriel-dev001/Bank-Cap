@@ -8,11 +8,11 @@ import {
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
 import StyleStart from "./StyleStart";
-import TopBar from "../../components/TopBar";
-import DonutChart from "../../components/DonutChart";
-import LineSeparator from "../../components/LineSeparator";
-import ButtonTextCenter from "../../components/ButtonTextCenter";
-import FloatingButton from "../../components/FloatingButton";
+import TopBar from "../../components/Start/TopBar";
+import DonutChart from "../../components/Start/DonutChart";
+import LineSeparator from "../../components/Start/LineSeparator";
+import ButtonTextCenter from "../../components/Commom/ButtonTextCenter";
+import FloatingButton from "../../components/Start/FloatingButton";
 
 // Definição dos tipos de navegação
 type RootStackParamList = {

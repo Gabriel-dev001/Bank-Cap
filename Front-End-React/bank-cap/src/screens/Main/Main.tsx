@@ -9,10 +9,10 @@ import { NavigationProps } from '../../navigation/types';
 import { ImageBackground } from 'react-native';
 import { Image } from 'react-native';
 
-import Title from "../../components/Title";
-import SubTitleText from "../../components/SubTitleText";
+import Title from "../../components/Commom/Title";
+import SubTitleText from "../../components/Commom/SubTitleText";
 import styles from "./StyleMain";
-import GoogleLoginButton from "../../components/GoogleLoginButton";
+import GoogleLoginButton from "../../components/Main/GoogleLoginButton";
 
 // Importa os tipos da navegação para manter o código limpo
 type RootStackParamList = {

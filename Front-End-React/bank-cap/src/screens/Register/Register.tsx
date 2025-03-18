@@ -5,11 +5,11 @@ import {
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 import { API_BASE_URL } from '@env';
-import Title from '../../components/Title';
-import SubTitleText from '../../components/SubTitleText';
-import InputText from '../../components/InputText';
-import ErrorMessage from '../../components/ErrorMessage';
-import ButtonTextCenter from '../../components/ButtonTextCenter';
+import Title from '../../components/Commom/Title';
+import SubTitleText from '../../components/Commom/SubTitleText';
+import InputText from '../../components/Commom/InputText';
+import ErrorMessage from '../../components/Commom/ErrorMessage';
+import ButtonTextCenter from '../../components/Commom/ButtonTextCenter';
 import StyleRegister from './StyleRegister';
 import { registerApi } from "../../services/authService";
 

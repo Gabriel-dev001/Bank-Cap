@@ -3,7 +3,6 @@ import {
   View,
   TouchableOpacity,
   Animated,
-  Text,
   StyleSheet,
   Image,
 } from "react-native";
@@ -69,29 +68,29 @@ const FloatingButton = () => {
 
   return (
     <View style={styles.container}>
-      {/* Botão 1 - Esquerda */}
+      {/* Botão 1 - Receita */}
       <Animated.View style={[styles.subButton, button1Style]}>
-        <TouchableOpacity style={styles.receitaButton}>
+        <TouchableOpacity style={styles.secondaryButton}>
           <Image
-            source={require("../assets/receita.png")} style={styles.icon}
+            source={require("../../assets/receita.png")} style={styles.icon}
           />
         </TouchableOpacity>
       </Animated.View>
 
-      {/* Botão 2 - Centro */}
+      {/* Botão 2 - Cripto */}
       <Animated.View style={[styles.subButton, button2Style]}>
-        <TouchableOpacity style={styles.criptoButton}>
+        <TouchableOpacity style={styles.secondaryButton}>
           <Image
-            source={require("../assets/cripto.png")} style={styles.icon}
+            source={require("../../assets/cripto.png")} style={styles.icon}
           />
         </TouchableOpacity>
       </Animated.View>
 
-      {/* Botão 3 - Direita */}
+      {/* Botão 3 - Despesa */}
       <Animated.View style={[styles.subButton, button3Style]}>
-        <TouchableOpacity style={styles.despesaButton}>
+        <TouchableOpacity style={styles.secondaryButton}>
           <Image
-            source={require("../assets/despesa.png")} style={styles.icon}
+            source={require("../../assets/despesa.png")} style={styles.icon}
           />
         </TouchableOpacity>
       </Animated.View>
@@ -124,31 +123,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4,
   },
-  despesaButton: {
-    width: 70,
-    height: 70,
-    backgroundColor: "rgb(0, 71, 187)",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 50,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-  },
-  receitaButton: {
-    width: 70,
-    height: 70,
-    backgroundColor: "rgb(0, 71, 187)",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 50,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-  },
-  criptoButton: {
+  secondaryButton: {
     width: 70,
     height: 70,
     backgroundColor: "rgb(0, 71, 187)",

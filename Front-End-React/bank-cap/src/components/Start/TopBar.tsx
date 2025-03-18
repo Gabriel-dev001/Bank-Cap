@@ -7,7 +7,7 @@ const TopBar = ({ title }: { title: string }) => {
           <Text style={styles.text}>{title}</Text>
           
           <TouchableOpacity style={styles.button} onPress={() => console.log("Botão clicado!")}>
-            <Image source={require("../assets/user.png")} style={styles.icon} />
+            <Image source={require("../../assets/user.png")} style={styles.icon} />
           </TouchableOpacity>
       </View>
     );
