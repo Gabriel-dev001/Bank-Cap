@@ -12,6 +12,7 @@ import TopBar from "../../components/TopBar";
 import DonutChart from "../../components/DonutChart";
 import LineSeparator from "../../components/LineSeparator";
 import ButtonTextCenter from "../../components/ButtonTextCenter";
+import FloatingButton from "../../components/FloatingButton";
 
 // Definição dos tipos de navegação
 type RootStackParamList = {
@@ -67,6 +68,8 @@ const Start: React.FC<Props> = ({ route }) => {
         </View>
 
         <ButtonTextCenter title="Suas Contas" onPress={() => {}} />
+
+        <FloatingButton />
 
       </View>
     </ImageBackground>
