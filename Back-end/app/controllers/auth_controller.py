@@ -1,4 +1,5 @@
-from flask import request, jsonify, redirect
+from flask import request, jsonify, Response
+import json
 from app.service.auth_service import AuthService
 
 class AuthController:
@@ -14,10 +15,17 @@ class AuthController:
     def registrar():
         data = request.get_json()
         if not all(key in data for key in ("nome", "email", "senha")):
-            return jsonify({"error": "Dados incompletos"}), 400
+            return Response(json.dumps({"error": "Dados incompletos"}, ensure_ascii=False), 
+                            status=400, mimetype="application/json")
 
-        return AuthService.registrar_usuario(data["nome"], data["email"], data["senha"])
-    
+        usuario, status_code = AuthService.registrar_usuario(data["nome"], data["email"], data["senha"])
+
+        if "error" in usuario:
+            return Response(json.dumps({"error": usuario["error"]}, ensure_ascii=False), 
+                            status=status_code, mimetype="application/json")
+
+        return Response(json.dumps(usuario["usuario"], ensure_ascii=False), 
+                        status=status_code, mimetype="application/json")
     @staticmethod
     def login_com_google():
         data = request.get_json()

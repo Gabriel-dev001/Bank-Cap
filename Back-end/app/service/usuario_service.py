@@ -12,6 +12,7 @@ class UsuarioService:
         if not usuario:
         
             return {"error": "Usuário não encontrado"}, 404
+        
         UsuarioRepository.excluir(usuario)
         return {"message": "Usuário excluído com sucesso"}, 200
 

@@ -21,7 +21,7 @@ class Conta(db.Model):
         self.saldo = saldo  # Adicionando saldo no construtor
 
     def to_dict(self):
-        return {
+        return  {
             "id": self.id,
             "usuario_id": self.usuario_id,
             "nome": self.nome,
