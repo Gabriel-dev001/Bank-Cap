@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -13,6 +13,7 @@ import DonutChart from "../../components/Start/DonutChart";
 import LineSeparator from "../../components/Start/LineSeparator";
 import ButtonTextCenter from "../../components/Commom/ButtonTextCenter";
 import FloatingButton from "../../components/Start/FloatingButton";
+import ModalConta from "../../components/Start/ModalConta"; 
 
 // Definição dos tipos de navegação
 type RootStackParamList = {
@@ -34,6 +35,7 @@ type Props = {
 };
 
 const Start: React.FC<Props> = ({ route }) => {
+  const [modalVisible, setModalVisible] = useState(false);
   const { userId } = route.params; // Pegando o userId passado via navigation
 
   return (
@@ -67,7 +69,13 @@ const Start: React.FC<Props> = ({ route }) => {
           </View>
         </View>
 
-        <ButtonTextCenter title="Suas Contas" onPress={() => {}} />
+        <ButtonTextCenter title="Suas Contas" onPress={() => setModalVisible(true)} />
+      
+        <ModalConta
+          isVisible={modalVisible}
+          onClose={() => setModalVisible(false)}
+          usuarioId={userId} // Passe o ID correto do usuário aqui
+        />
 
         {/* Botões redondos*/}
         <FloatingButton/>

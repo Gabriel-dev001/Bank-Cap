@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { 
-  View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, Keyboard, TouchableWithoutFeedback 
+  View, Text, ImageBackground, Keyboard, TouchableWithoutFeedback 
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
-import { API_BASE_URL } from '@env';
 import Title from '../../components/Commom/Title';
 import SubTitleText from '../../components/Commom/SubTitleText';
 import InputText from '../../components/Commom/InputText';
@@ -48,8 +47,8 @@ const Register: React.FC<Props> = ({ navigation }) => {
       try {
         const data = await registerApi(name, email, password);
     
-        if (data.usuario && data.usuario.id) {
-          navigation.navigate("Start", { userId: data.usuario.id.toString() });
+        if (data && data.id) {
+          navigation.navigate("Start", { userId: data.id.toString() });
         } else {
           setGeneralError("Erro ao processar registro.");
         }
