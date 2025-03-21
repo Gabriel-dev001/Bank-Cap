@@ -1,47 +1,52 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  Alert,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, Alert, StyleSheet, TouchableOpacity } from "react-native";
 import Modal from "react-native-modal";
 import Title from "../../components/Commom/Title";
 import InputText from "../../components/Commom/InputText";
 import ButtonTextCenter from "../../components/Commom/ButtonTextCenter";
+import ErrorMessage from "../../components/Commom/ErrorMessage";
+import { criarContaApi } from "../../services/contaService";
 
 interface ModalContaCadastroProps {
   isVisible: boolean;
   onClose: () => void;
-  usuarioId: string;
+  usuario_id: string;
 }
 
 const ModalContaCadastro: React.FC<ModalContaCadastroProps> = ({
   isVisible,
   onClose,
-  usuarioId,
+  usuario_id,
 }) => {
   const [nome, setNome] = useState("");
   const [banco, setBanco] = useState("");
   const [tipo, setTipo] = useState("PESSOAL"); // Padrão "PESSOAL"
+  const [apiError, setApiError] = useState("");
 
   const handleCadastro = async () => {
     if (!nome || !banco) {
-      Alert.alert("Erro", "Preencha todos os campos");
-      return;
-    }
-
-    const contaData = {
-      usuario_id: usuarioId,
-      nome,
-      banco,
-      tipo,
-      saldo: null,
-    };
-
-    Alert.alert("Conta cadastrada!", JSON.stringify(contaData, null, 2));
-    onClose();
+      setApiError("Preencha todos os campos")
+    }else{
+      try {
+        const response = await criarContaApi(usuario_id, nome, banco, tipo);
+  
+        if (response) {
+          setApiError("");
+          onClose();
+        } else {
+          Alert.alert("Erro", "Não foi possível cadastrar a conta.");
+        }
+        
+      } catch (error) {
+        const errorMessage =
+          typeof error === "string"
+            ? error
+            : error instanceof Error
+            ? error.message
+            : "Erro ao conectar com a API.";
+        setApiError(errorMessage);
+      }
+    }    
   };
 
   return (
@@ -52,12 +57,12 @@ const ModalContaCadastro: React.FC<ModalContaCadastroProps> = ({
         <View style={{ alignSelf: "flex-start", width: "85%" }}>
           <Text style={styles.textSmall}>Apelido da Conta:</Text>
         </View>
-        <InputText autoCapitalize="none" />
+        <InputText autoCapitalize="none" value={nome} onChangeText={setNome}  />
 
         <View style={{ alignSelf: "flex-start", width: "85%" }}>
           <Text style={styles.textSmall}>Nome do Banco:</Text>
         </View>
-        <InputText autoCapitalize="none" />
+        <InputText autoCapitalize="none" value={banco} onChangeText={setBanco} />
 
         <View style={{ alignSelf: "flex-start", width: "85%" }}>
           <Text style={styles.textSmall}>Tipo da Conta:</Text>
@@ -85,6 +90,8 @@ const ModalContaCadastro: React.FC<ModalContaCadastroProps> = ({
           </TouchableOpacity>
         </View>
 
+        <ErrorMessage message={apiError || ""} />
+
         <ButtonTextCenter title="Cadastrar" onPress={handleCadastro} />
       </View>
     </Modal>
@@ -93,7 +100,7 @@ const ModalContaCadastro: React.FC<ModalContaCadastroProps> = ({
 
 const styles = StyleSheet.create({
   modalContainer: {
-    backgroundColor:"rgb(17, 13, 13)",
+    backgroundColor: "rgb(17, 13, 13)",
     padding: 20,
     borderRadius: 10,
     alignItems: "center",
@@ -138,7 +145,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     opacity: 0.9,
   },
-  
 });
 
 export default ModalContaCadastro;

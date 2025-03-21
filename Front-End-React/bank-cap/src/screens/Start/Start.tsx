@@ -74,7 +74,7 @@ const Start: React.FC<Props> = ({ route }) => {
         <ModalConta
           isVisible={modalVisible}
           onClose={() => setModalVisible(false)}
-          usuarioId={userId} // Passe o ID correto do usuário aqui
+          usuario_id={userId} // Passe o ID correto do usuário aqui
         />
 
         {/* Botões redondos*/}
