@@ -12,3 +12,16 @@ class ContaRepository:
     @staticmethod
     def listar_todos():
         return Conta.query.all()
+    
+    @staticmethod
+    def buscar_por_id(conta_id):
+        return Conta.query.get(conta_id)
+
+    @staticmethod
+    def atualizar(conta):
+        db.session.commit()
+    
+    @staticmethod
+    def deletar(conta):
+        db.session.delete(conta)
+        db.session.commit()

@@ -27,6 +27,6 @@ class Conta(db.Model):
             "nome": self.nome,
             "banco": self.banco,
             "tipo": self.tipo,
-            "saldo": float(self.saldo),  # Convertendo Decimal para float
+            "saldo": float(self.saldo) if self.saldo is not None else 0.00,
             "criado_em": self.criado_em.strftime("%Y-%m-%d %H:%M:%S") if self.criado_em else None
         }
