@@ -27,11 +27,11 @@ class UsuarioRepository:
         
     
     @staticmethod
-    def listar_todos():
+    def get_usuarios():
         return Usuario.query.all()
     
     @staticmethod
-    def buscar_por_id(usuario_id):
+    def get_by_id_usuario(usuario_id):
         return Usuario.query.get(usuario_id)
 
     @staticmethod

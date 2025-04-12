@@ -11,11 +11,11 @@ class ContaController:
         if not all(key in data for key in ("usuario_id", "nome", "banco", "tipo")):
             return jsonify({"error": "Dados incompletos"}), 400
         
-        response =  ContaService.criar_conta(
+        response, status = ContaService.criar_conta(
             data["usuario_id"], 
             data["nome"], 
             data["banco"], 
-            data["tipo"], 
+            data["tipo"]
         )
 
         return Response(json.dumps(response, ensure_ascii=False), 
@@ -23,10 +23,18 @@ class ContaController:
     
     
     @staticmethod
-    def listar_contas():
-        contas = ContaService.listar_todos()
+    def get_contas():
+        contas = ContaService.get_contas()
         return Response(json.dumps(contas, ensure_ascii=False), 
                     status=200, mimetype="application/json")
+
+    def get_by_id_contas(conta_id):
+        conta = ContaService.get_by_id_conta(conta_id)
+
+        if conta:
+            return Response(json.dumps(conta.to_dict(), ensure_ascii=False), status=200, mimetype="application/json")
+            
+        return Response(json.dumps({"erro": "Conta não encontrado"}), status=404, mimetype="application/json")
 
     @staticmethod
     def editar_conta(conta_id):

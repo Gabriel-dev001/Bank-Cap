@@ -3,18 +3,17 @@ from extensions import db
 
 class ContaRepository:
     @staticmethod
-    def criar_conta(nome, banco, tipo, saldo):
-        nova_conta = Conta(nome=nome, banco=banco, tipo=tipo, saldo=saldo)
+    def criar_conta(nova_conta):
         db.session.add(nova_conta)
         db.session.commit()
         return nova_conta
     
     @staticmethod
-    def listar_todos():
+    def get_contas():
         return Conta.query.all()
     
     @staticmethod
-    def buscar_por_id(conta_id):
+    def get_by_id_conta(conta_id):
         return Conta.query.get(conta_id)
 
     @staticmethod
