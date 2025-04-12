@@ -7,6 +7,7 @@ from app.routes.auth_routes import auth_bp
 from app.routes.usuario_routes import usuario_bp
 from app.routes.conta_routes import conta_bp
 from app.routes.receita_routes import receita_bp
+from app.routes.despesa_routes import despesa_bp
 
 def create_app():
     app = Flask(__name__)
@@ -23,6 +24,7 @@ def create_app():
     app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(conta_bp, url_prefix="/contas")
     app.register_blueprint(receita_bp, url_prefix="/receitas")
+    app.register_blueprint(despesa_bp, url_prefix="/despesas")
    
 
     return app
