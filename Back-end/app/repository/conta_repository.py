@@ -1,5 +1,7 @@
 from app.models.conta_model import Conta
 from extensions import db
+from decimal import Decimal
+
 
 class ContaRepository:
     @staticmethod
@@ -24,3 +26,13 @@ class ContaRepository:
     def deletar(conta):
         db.session.delete(conta)
         db.session.commit()
+
+    @staticmethod
+    def alterar_saldo(conta_id, valor):
+        conta = Conta.query.get(conta_id)
+        if not conta:
+            return False
+
+        conta.saldo += Decimal(valor)  
+        db.session.commit()
+        return True

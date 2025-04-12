@@ -21,13 +21,13 @@ class ContaController:
         return Response(json.dumps(response, ensure_ascii=False), 
                     status=201, mimetype="application/json")
     
-    
     @staticmethod
     def get_contas():
         contas = ContaService.get_contas()
         return Response(json.dumps(contas, ensure_ascii=False), 
                     status=200, mimetype="application/json")
 
+    @staticmethod
     def get_by_id_contas(conta_id):
         conta = ContaService.get_by_id_conta(conta_id)
 
@@ -50,3 +50,20 @@ class ContaController:
 
         return Response(json.dumps(response, ensure_ascii=False), 
                         status=status_code, mimetype="application/json")
+    
+    @staticmethod
+    def alterar_saldo():
+        data = request.get_json()
+
+        if not all(key in data for key in ("conta_id", "valor")):
+            return False
+
+        try:
+            conta_id = data["conta_id"]
+            valor = float(data["valor"])
+
+            sucesso = ContaService.alterar_saldo(conta_id, valor)
+            return sucesso
+        except Exception as e:
+            print(f"Erro ao alterar saldo: {e}") 
+            return False
