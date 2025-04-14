@@ -22,7 +22,7 @@ class ReceitaController:
     @staticmethod
     def get_receitas_por_conta(conta_id):
         receitas, status = ReceitaService.get_receitas_por_conta(conta_id)
-        return Response(json.dumps(receitas, ensure_ascii=False),status=200,mimetype="application/json")
+        return Response(json.dumps(receitas, ensure_ascii=False),status=status,mimetype="application/json")
     
     @staticmethod
     def get_por_id(receita_id):

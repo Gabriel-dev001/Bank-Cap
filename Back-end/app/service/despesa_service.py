@@ -9,6 +9,9 @@ from sqlalchemy.orm import joinedload
 class DespesaService:
     @staticmethod
     def criar_despesa(valor, data, categoria, conta_id, descricao=None):
+        valor = -abs(float(valor))
+        print(valor)
+        
         nova_despesa = Despesa(
             valor=valor,
             data=data,
@@ -18,7 +21,6 @@ class DespesaService:
         )
 
         despesa_salva = DespesaRepository.criar_despesa(nova_despesa)
-        valor = -abs(float(valor))
         ContaService.alterar_saldo(conta_id, valor)
 
         return despesa_salva.to_dict(), 201

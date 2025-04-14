@@ -23,7 +23,7 @@ class DespesaController:
     @staticmethod
     def get_despesas_por_conta(conta_id):
         despessas, status = DespesaService.get_despesas_por_conta(conta_id)
-        return Response(json.dumps(despessas, ensure_ascii=False),status=200,mimetype="application/json")
+        return Response(json.dumps(despessas, ensure_ascii=False),status=status,mimetype="application/json")
     
     @staticmethod
     def get_por_id(despesa_id):
