@@ -33,6 +33,18 @@ class UsuarioRepository:
     @staticmethod
     def get_by_id_usuario(usuario_id):
         return Usuario.query.get(usuario_id)
+    
+    @staticmethod
+    def editar_usuario(usuario_id, dados):
+        usuario = Usuario.query.get(usuario_id)
+        if not usuario:
+            return None
+
+        for key, value in dados.items():
+            setattr(usuario, key, value)
+
+        db.session.commit()
+        return usuario
 
     @staticmethod
     def excluir(usuario):

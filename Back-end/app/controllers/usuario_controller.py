@@ -18,6 +18,23 @@ class UsuarioController:
             
         return Response(json.dumps({"erro": "Usuário não encontrado"}), status=404, mimetype="application/json")
 
+    
+    @staticmethod
+    def editar_usuario(usuario_id):
+        data = request.get_json()
+        nome = data.get('nome')
+        email = data.get('email')
+        senha = data.get('senha')
+
+        usuario_editado, status = UsuarioService.editar_usuario(
+            usuario_id=usuario_id,
+            nome=nome,
+            email=email,
+            senha=senha
+        )
+    
+        return Response(json.dumps(usuario_editado, ensure_ascii=False),status=status,mimetype="application/json")  
+    
     @staticmethod
     def excluir_usuario(usuario_id):
         resposta, status_code = UsuarioService.excluir_usuario(usuario_id)
