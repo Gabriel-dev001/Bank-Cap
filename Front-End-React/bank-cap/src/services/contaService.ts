@@ -11,14 +11,14 @@ export const criarContaApi = async (
       nome,
       banco,
       tipo,
-      saldo: null,
+      saldo: 0.0,
     };
   
-    const response = await apiFetch("/contas/create", "POST", accountData);
+    const response = await apiFetch("/contas/", "POST", accountData);
   
     if (!response) {
       throw new Error("Erro ao conectar com a API.");
     }
   
     return response;
-  };
+};

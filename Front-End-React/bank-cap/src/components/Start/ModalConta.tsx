@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { View, Text, Alert, StyleSheet, TouchableOpacity } from "react-native";
 import Modal from "react-native-modal";
-import Title from "../../components/Commom/Title";
-import InputText from "../../components/Commom/InputText";
-import ButtonTextCenter from "../../components/Commom/ButtonTextCenter";
-import ErrorMessage from "../../components/Commom/ErrorMessage";
+import Title from "../Commom/Title";
+import InputText from "../Commom/InputText";
+import ButtonTextCenter from "../Commom/ButtonTextCenter";
+import ErrorMessage from "../Commom/ErrorMessage";
 import { criarContaApi } from "../../services/contaService";
 
 interface ModalContaCadastroProps {
@@ -20,7 +20,7 @@ const ModalContaCadastro: React.FC<ModalContaCadastroProps> = ({
 }) => {
   const [nome, setNome] = useState("");
   const [banco, setBanco] = useState("");
-  const [tipo, setTipo] = useState("PESSOAL"); // Padrão "PESSOAL"
+  const [tipo, setTipo] = useState("PESSOAL"); 
   const [apiError, setApiError] = useState("");
 
   const handleCadastro = async () => {

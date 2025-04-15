@@ -14,6 +14,7 @@ import LineSeparator from "../../components/Start/LineSeparator";
 import ButtonTextCenter from "../../components/Commom/ButtonTextCenter";
 import FloatingButton from "../../components/Start/FloatingButton";
 import ModalConta from "../../components/Start/ModalConta"; 
+import { apiFetch } from "../../services/api";
 
 // Definição dos tipos de navegação
 type RootStackParamList = {
@@ -36,7 +37,23 @@ type Props = {
 
 const Start: React.FC<Props> = ({ route }) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const { userId } = route.params; // Pegando o userId passado via navigation
+  const [totalReceitas, setTotalReceitas] = useState<number>(0); // Estado para o total das receitas
+  const [totalDespesas, setTotalDespesas] = useState<number>(0);
+  const { userId } = route.params;
+
+  const fetchTotalReceitas = async () => {
+    try {
+      const response = await apiFetch(`/receitas/${userId}`, "GET");
+
+      if (response && Array.isArray(response)) {
+        const total = response.reduce((acc: number, receita: any) => acc + receita.valor, 0);
+        setTotalReceitas(total);
+      }
+    } catch (error) {
+      console.error("Erro ao buscar receitas:", error);
+    }
+  };
+  
 
   return (
     <ImageBackground
@@ -74,7 +91,7 @@ const Start: React.FC<Props> = ({ route }) => {
         <ModalConta
           isVisible={modalVisible}
           onClose={() => setModalVisible(false)}
-          usuario_id={userId} // Passe o ID correto do usuário aqui
+          usuario_id={userId} 
         />
 
         {/* Botões redondos*/}
