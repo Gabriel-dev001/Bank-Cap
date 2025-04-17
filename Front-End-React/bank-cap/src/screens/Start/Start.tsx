@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -14,7 +14,9 @@ import LineSeparator from "../../components/Start/LineSeparator";
 import ButtonTextCenter from "../../components/Commom/ButtonTextCenter";
 import FloatingButton from "../../components/Start/FloatingButton";
 import ModalConta from "../../components/Start/ModalConta"; 
+import ModalListaContas from "../../components/Start/ModalListaContas"; 
 import { apiFetch } from "../../services/api";
+import { buscarContasDoUsuario } from "../../services/contaService";
 
 // Definição dos tipos de navegação
 type RootStackParamList = {
@@ -35,24 +37,32 @@ type Props = {
   route: StartScreenRouteProp;
 };
 
+interface Conta {
+  id: number;
+  usuario_id: number;
+  nome: string;
+  banco: string;
+  tipo: string;
+  saldo: number;
+  criado_em: string;
+}
+
 const Start: React.FC<Props> = ({ route }) => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [totalReceitas, setTotalReceitas] = useState<number>(0); // Estado para o total das receitas
-  const [totalDespesas, setTotalDespesas] = useState<number>(0);
+  const [modalVisible, setModalVisible] = useState(false); 
+  const [modalVisivel, setModalVisivel] = useState(false);
+  const [listaContas, setListaContas] = useState<Conta[]>([]);  
   const { userId } = route.params;
 
-  const fetchTotalReceitas = async () => {
-    try {
-      const response = await apiFetch(`/receitas/${userId}`, "GET");
-
-      if (response && Array.isArray(response)) {
-        const total = response.reduce((acc: number, receita: any) => acc + receita.valor, 0);
-        setTotalReceitas(total);
+  useEffect(() => {
+    const carregarContas = async () => {
+      const contas = await buscarContasDoUsuario(userId); 
+      if (contas) {
+        setListaContas(contas);
       }
-    } catch (error) {
-      console.error("Erro ao buscar receitas:", error);
-    }
-  };
+    };
+  
+    carregarContas();
+  }, [userId]);
   
 
   return (
@@ -86,14 +96,16 @@ const Start: React.FC<Props> = ({ route }) => {
           </View>
         </View>
 
-        <ButtonTextCenter title="Suas Contas" onPress={() => setModalVisible(true)} />
-      
-        <ModalConta
+        
+        <ButtonTextCenter title="Suas Contas" onPress={() => setModalVisible(true)} /> 
+          
+        <ModalListaContas
           isVisible={modalVisible}
-          onClose={() => setModalVisible(false)}
-          usuario_id={userId} 
+          onClose={() => setModalVisible(false)} 
+          contas={listaContas}
+          usuario_id={userId}
         />
-
+      
         {/* Botões redondos*/}
         <FloatingButton/>
 

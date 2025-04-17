@@ -2,7 +2,6 @@ from flask import Blueprint, jsonify, request, Response
 import json
 from app.service.conta_service import ContaService
 
-
 class ContaController:
     @staticmethod
     def criar_conta():
@@ -54,7 +53,7 @@ class ContaController:
         response, status_code = ContaService.deletar_conta(conta_id)
 
         return Response(json.dumps(response, ensure_ascii=False), 
-                        status=status_code, mimetype="application/json")
+                        status=status_code, mimetype="application/json")  
     
     @staticmethod
     def alterar_saldo():
