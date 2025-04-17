@@ -43,6 +43,11 @@ class ContaController:
 
         return Response(json.dumps(response, ensure_ascii=False), 
                         status=status_code, mimetype="application/json")
+        
+    @staticmethod
+    def get_contas_usuario(usuario_id):
+        contas, status = ContaService.get_contas_usuario(usuario_id)
+        return Response(json.dumps(contas, ensure_ascii=False), status=status, mimetype='application/json')
 
     @staticmethod
     def deletar_conta(conta_id):

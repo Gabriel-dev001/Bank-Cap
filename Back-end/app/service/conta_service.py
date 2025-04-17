@@ -36,6 +36,14 @@ class ContaService:
         return ContaRepository.get_by_id_conta(conta_id)
     
     @staticmethod
+    def get_contas_usuario(usuario_id):
+        contas = ContaRepository.get_contas_usuario(usuario_id)
+        if not contas:
+            return {"message": "Nenhuma conta encontrada para este usuário"}, 404
+        
+        return [conta.to_dict() for conta in contas], 200
+    
+    @staticmethod
     def editar_conta(conta_id, data):
         conta = ContaRepository.get_by_id_conta(conta_id)
         if not conta:

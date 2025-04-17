@@ -17,6 +17,10 @@ class ContaRepository:
     @staticmethod
     def get_by_id_conta(conta_id):
         return Conta.query.get(conta_id)
+    
+    @staticmethod
+    def get_contas_usuario(usuario_id):
+        return Conta.query.filter_by(usuario_id=usuario_id).all()
 
     @staticmethod
     def atualizar(conta):
