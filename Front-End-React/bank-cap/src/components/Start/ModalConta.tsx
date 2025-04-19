@@ -11,12 +11,14 @@ interface ModalContaCadastroProps {
   isVisible: boolean;
   onClose: () => void;
   usuario_id: string;
+  onContaCriada: () => void;
 }
 
 const ModalContaCadastro: React.FC<ModalContaCadastroProps> = ({
   isVisible,
   onClose,
   usuario_id,
+  onContaCriada
 }) => {
   const [nome, setNome] = useState("");
   const [banco, setBanco] = useState("");
@@ -33,6 +35,7 @@ const ModalContaCadastro: React.FC<ModalContaCadastroProps> = ({
         if (response) {
           setApiError("");
           onClose();
+          onContaCriada();
         } else {
           Alert.alert("Erro", "Não foi possível cadastrar a conta.");
         }

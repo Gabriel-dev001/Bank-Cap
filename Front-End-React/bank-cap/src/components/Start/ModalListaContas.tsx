@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect  } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import Modal from "react-native-modal"; 
 import ButtonTextCenter from "../../components/Commom/ButtonTextCenter"; 
 import ModalConta from "../../components/Start/ModalConta"; 
+import { buscarContasDoUsuario } from "../../services/contaService";
+import { deletarConta } from "../../services/contaService";
 
 interface Conta {
-  id: number;
+  id: string;
   nome: string;
   banco: string;
 }
@@ -14,16 +16,30 @@ interface ModalListaContasProps {
   isVisible: boolean;
   onClose: () => void;
   contas: Conta[];
-  usuario_id: string; // Passando o ID do usuário
+  usuario_id: string; 
+  onSelecionarConta: (contaId: string) => void;
 }
 
 const ModalListaContas: React.FC<ModalListaContasProps> = ({
   isVisible,
   onClose,
   contas,
-  usuario_id,  // Recebendo o ID do usuário
+  usuario_id,  
+  onSelecionarConta,
 }) => {
-  const [modalVisible, setModalVisible] = useState(false);  // Estado do modal
+  const [modalVisible, setModalVisible] = useState(false);  
+  const [contasState, setContasState] = useState<Conta[]>(contas);
+
+  const carregarContas = async () => {
+    const novasContas = await buscarContasDoUsuario(usuario_id);
+    setContasState(novasContas);
+  };
+
+  useEffect(() => {
+    if (isVisible) {
+      carregarContas();
+    }
+  }, [isVisible]);
 
   return (
     <Modal isVisible={isVisible} onBackdropPress={onClose}>
@@ -31,30 +47,46 @@ const ModalListaContas: React.FC<ModalListaContasProps> = ({
         <Text style={styles.title}>Minhas Contas</Text>
 
         <ScrollView style={{ width: "100%" }}>
-          {contas.map((conta) => (
+          {contasState.map((conta) => (
             <View key={conta.id} style={styles.contaContainer}>
-              <TouchableOpacity style={styles.contaButton}>
+              {/* <TouchableOpacity style={styles.contaButton}>
                 <Text style={styles.contaTexto}>{conta.nome} | {conta.banco}</Text>
+              </TouchableOpacity> */}
+
+              <TouchableOpacity
+                key={conta.id}
+                style={styles.contaButton}
+                onPress={() => onSelecionarConta(conta.id)} 
+              >
+                <Text style={styles.contaTexto}>{conta.nome}</Text>
+                <Text style={styles.contaTexto}>{conta.banco}</Text>
               </TouchableOpacity>
 
               <TouchableOpacity style={styles.acaoBotao}>
                 <Text style={styles.acaoTexto}>✏️</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.acaoBotao}>
+              <TouchableOpacity
+                style={styles.acaoBotao}
+                onPress={async () => {
+                  await deletarConta(conta.id);
+                  carregarContas();
+                }}
+                >
                 <Text style={styles.acaoTexto}>🗑️</Text>
               </TouchableOpacity>
             </View>
           ))}
 
           {/* Botão para abrir o ModalConta */}
-          <ButtonTextCenter title="Suas Contas" onPress={() => setModalVisible(true)} />
+          <ButtonTextCenter title="Criar Conta" onPress={() => setModalVisible(true)} />
 
           {/* ModalConta passando o usuario_id */}
           <ModalConta
             isVisible={modalVisible}
             onClose={() => setModalVisible(false)}
             usuario_id={usuario_id}
+            onContaCriada={carregarContas}
           />
         </ScrollView>
       </View>

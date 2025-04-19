@@ -1,6 +1,5 @@
 import { apiFetch } from "./api";
 
-// Buscar todas as contas de um usuário
 export const buscarContasDoUsuario = async (usuario_id: string) => {
   try {
     const response = await apiFetch(`/contas/usuario/${usuario_id}`, "GET");
@@ -37,4 +36,14 @@ export const criarContaApi = async (
   }
 
   return response;
+};
+
+export const deletarConta = async (id: string) => {
+  try {
+    const response = await apiFetch(`/contas/${id}`, "DELETE");
+    return response;
+  } catch (error) {
+    console.error("Erro ao deletar conta:", error);
+    return null;
+  }
 };

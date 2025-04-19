@@ -38,8 +38,8 @@ type Props = {
 };
 
 interface Conta {
-  id: number;
-  usuario_id: number;
+  id: string;
+  usuario_id: string;
   nome: string;
   banco: string;
   tipo: string;
@@ -51,7 +51,22 @@ const Start: React.FC<Props> = ({ route }) => {
   const [modalVisible, setModalVisible] = useState(false); 
   const [modalVisivel, setModalVisivel] = useState(false);
   const [listaContas, setListaContas] = useState<Conta[]>([]);  
+  const [dadosConta, setDadosConta] = useState<any>(null);
+  const [contaSelecionadaId, setContaSelecionadaId] = useState<String | null>(null);
   const { userId } = route.params;
+
+  const buscarDadosConta = async (id: string) => {
+    const dados = await apiFetch(`/contas/${contaSelecionadaId}`);
+    if (dados) {
+      setDadosConta(dados);
+    }
+  };
+
+  useEffect(() => {
+    if (contaSelecionadaId) {
+      buscarDadosConta(contaSelecionadaId.toString());
+    }
+  }, [contaSelecionadaId]);
 
   useEffect(() => {
     const carregarContas = async () => {
@@ -60,10 +75,13 @@ const Start: React.FC<Props> = ({ route }) => {
         setListaContas(contas);
       }
     };
-  
     carregarContas();
   }, [userId]);
-  
+
+  const handleSelecionarConta = (contaId: string) => {
+    setContaSelecionadaId(contaId); 
+    setModalVisible(false);
+  };
 
   return (
     <ImageBackground
@@ -71,7 +89,7 @@ const Start: React.FC<Props> = ({ route }) => {
       style={StyleStart.background}
     >
       <View style={{ flex: 0, justifyContent: "flex-start", alignItems: "center", paddingTop: 120,}}>
-        <TopBar title={`Usuário: ${userId}`} />
+      <TopBar title={`${dadosConta ? dadosConta.nome : "--"}`} />
         <DonutChart />{/*Aqui eu vou ter que passar o tanto de receita e de despesa que eu tenho*/}
       </View>
 
@@ -104,7 +122,11 @@ const Start: React.FC<Props> = ({ route }) => {
           onClose={() => setModalVisible(false)} 
           contas={listaContas}
           usuario_id={userId}
+          onSelecionarConta={handleSelecionarConta} 
         />
+
+        {/* Debug */}
+        <Text style={{ color: "white" }}>Conta Selecionada: {contaSelecionadaId}</Text>
       
         {/* Botões redondos*/}
         <FloatingButton/>
