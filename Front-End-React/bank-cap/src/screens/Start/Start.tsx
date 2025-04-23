@@ -42,7 +42,7 @@ interface Conta {
   usuario_id: string;
   nome: string;
   banco: string;
-  tipo: string;
+  tipo: "PESSOAL" | "EMPRESARIAL";
   saldo: number;
   criado_em: string;
 }

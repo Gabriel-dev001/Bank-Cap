@@ -1,22 +1,30 @@
-import React, { useState, useEffect  } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
-import Modal from "react-native-modal"; 
-import ButtonTextCenter from "../../components/Commom/ButtonTextCenter"; 
-import ModalConta from "../../components/Start/ModalConta"; 
-import { buscarContasDoUsuario } from "../../services/contaService";
-import { deletarConta } from "../../services/contaService";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
+import Modal from "react-native-modal";
+
+import ButtonTextCenter from "../../components/Commom/ButtonTextCenter";
+import ModalConta from "../../components/Start/ModalConta";
+import ModalContaEdicao from "../../components/Start/ModalContaEdicao";
+import { buscarContasDoUsuario, deletarConta } from "../../services/contaService";
 
 interface Conta {
   id: string;
   nome: string;
   banco: string;
+  tipo: "PESSOAL" | "EMPRESARIAL";
 }
 
 interface ModalListaContasProps {
   isVisible: boolean;
   onClose: () => void;
   contas: Conta[];
-  usuario_id: string; 
+  usuario_id: string;
   onSelecionarConta: (contaId: string) => void;
 }
 
@@ -24,11 +32,13 @@ const ModalListaContas: React.FC<ModalListaContasProps> = ({
   isVisible,
   onClose,
   contas,
-  usuario_id,  
+  usuario_id,
   onSelecionarConta,
 }) => {
-  const [modalVisible, setModalVisible] = useState(false);  
+  const [modalCriarVisible, setModalCriarVisible] = useState(false);
+  const [modalEditarVisible, setModalEditarVisible] = useState(false);
   const [contasState, setContasState] = useState<Conta[]>(contas);
+  const [contaParaEditar, setContaParaEditar] = useState<Conta | undefined>(undefined);
 
   const carregarContas = async () => {
     const novasContas = await buscarContasDoUsuario(usuario_id);
@@ -36,59 +46,81 @@ const ModalListaContas: React.FC<ModalListaContasProps> = ({
   };
 
   useEffect(() => {
-    if (isVisible) {
-      carregarContas();
-    }
-  }, [isVisible]);
+    setContasState(contas);
+  }, [contas]);
+
+  const handleEditar = (conta: Conta) => {
+    setContaParaEditar(conta);
+    setModalEditarVisible(true);
+  };
+
+  const handleExcluir = async (contaId: string) => {
+    await deletarConta(contaId);
+    carregarContas();
+  };
+
+  const renderContas = () => {
+    return contasState.map((conta) => (
+      <View key={conta.id} style={styles.contaContainer}>
+        <TouchableOpacity
+          style={styles.contaButton}
+          onPress={() => onSelecionarConta(conta.id)}
+        >
+          <Text style={styles.contaTexto}>{conta.nome}</Text>
+          <Text style={styles.contaTexto}>{conta.banco}</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.acaoBotao}
+          onPress={() => handleEditar(conta)}
+        >
+          <Text style={styles.acaoTexto}>✏️</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.acaoBotao}
+          onPress={() => handleExcluir(conta.id)}
+        >
+          <Text style={styles.acaoTexto}>🗑️</Text>
+        </TouchableOpacity>
+      </View>
+    ));
+  };
 
   return (
     <Modal isVisible={isVisible} onBackdropPress={onClose}>
       <View style={styles.modalContainer}>
         <Text style={styles.title}>Minhas Contas</Text>
 
-        <ScrollView style={{ width: "100%" }}>
-          {contasState.map((conta) => (
-            <View key={conta.id} style={styles.contaContainer}>
-              {/* <TouchableOpacity style={styles.contaButton}>
-                <Text style={styles.contaTexto}>{conta.nome} | {conta.banco}</Text>
-              </TouchableOpacity> */}
-
-              <TouchableOpacity
-                key={conta.id}
-                style={styles.contaButton}
-                onPress={() => onSelecionarConta(conta.id)} 
-              >
-                <Text style={styles.contaTexto}>{conta.nome}</Text>
-                <Text style={styles.contaTexto}>{conta.banco}</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.acaoBotao}>
-                <Text style={styles.acaoTexto}>✏️</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={styles.acaoBotao}
-                onPress={async () => {
-                  await deletarConta(conta.id);
-                  carregarContas();
-                }}
-                >
-                <Text style={styles.acaoTexto}>🗑️</Text>
-              </TouchableOpacity>
-            </View>
-          ))}
-
-          {/* Botão para abrir o ModalConta */}
-          <ButtonTextCenter title="Criar Conta" onPress={() => setModalVisible(true)} />
-
-          {/* ModalConta passando o usuario_id */}
-          <ModalConta
-            isVisible={modalVisible}
-            onClose={() => setModalVisible(false)}
-            usuario_id={usuario_id}
-            onContaCriada={carregarContas}
+        <ScrollView style={styles.scrollContainer}>
+          {renderContas()}
+          <ButtonTextCenter
+            title="Criar Conta"
+            onPress={() => setModalCriarVisible(true)}
           />
         </ScrollView>
+
+        {/* Modal para criar nova conta */}
+        <ModalConta
+          isVisible={modalCriarVisible}
+          onClose={() => setModalCriarVisible(false)}
+          usuario_id={usuario_id}
+          onContaCriada={carregarContas}
+        />
+
+        {/* Modal para editar conta */}
+        {contaParaEditar && (
+          <ModalContaEdicao
+            isVisible={modalEditarVisible}
+            onClose={() => {
+              setModalEditarVisible(false);
+              setContaParaEditar(undefined);
+            }}
+            conta={contaParaEditar}
+            onContaEditada={carregarContas}
+            usuarioId={usuario_id}
+          />
+        )}
       </View>
     </Modal>
   );
@@ -107,6 +139,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#FFF",
     marginBottom: 15,
+  },
+  scrollContainer: {
+    width: "100%",
   },
   contaContainer: {
     flexDirection: "row",
@@ -143,5 +178,4 @@ const styles = StyleSheet.create({
 });
 
 export default ModalListaContas;
-
 

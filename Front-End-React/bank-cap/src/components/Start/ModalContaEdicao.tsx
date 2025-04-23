@@ -1,78 +1,96 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, Alert, StyleSheet, TouchableOpacity } from "react-native";
 import Modal from "react-native-modal";
 import Title from "../Commom/Title";
 import InputText from "../Commom/InputText";
 import ButtonTextCenter from "../Commom/ButtonTextCenter";
 import ErrorMessage from "../Commom/ErrorMessage";
-import { criarContaApi } from "../../services/contaService";
+import { atualizarConta } from "../../services/contaService";
 
-interface ModalContaCadastroProps {
-  isVisible: boolean;
-  onClose: () => void;
-  usuario_id: string;
-  onContaCriada: () => void;
+interface Conta {
+  id: string;
+  nome: string;
+  banco: string;
+  tipo: "PESSOAL" | "EMPRESARIAL";
 }
 
-const ModalContaCadastro: React.FC<ModalContaCadastroProps> = ({
+interface ModalContaEdicaoProps {
+  isVisible: boolean;
+  onClose: () => void;
+  conta: Conta;
+  onContaEditada: () => Promise<void>;
+  usuarioId: string;
+}
+
+const ModalContaEdicao: React.FC<ModalContaEdicaoProps> = ({
   isVisible,
   onClose,
-  usuario_id,
-  onContaCriada,
+  conta,
+  onContaEditada,
+  usuarioId,
 }) => {
-  const [nome, setNome] = useState("");
-  const [banco, setBanco] = useState("");
-  const [tipo, setTipo] = useState("PESSOAL");
+  const [nome, setNome] = useState(conta.nome);
+  const [banco, setBanco] = useState(conta.banco);
+  const [tipo, setTipo] = useState(conta.tipo);
   const [apiError, setApiError] = useState("");
 
-  const handleCadastro = async () => {
-    if (!nome || !banco) {
-      setApiError("Preencha todos os campos");
+  useEffect(() => {
+    setNome(conta.nome);
+    setBanco(conta.banco);
+    setTipo(conta.tipo);
+  }, [conta]);
+
+  const handleEditar = async () => {
+    if (!nome || !banco || !tipo) {
+      setApiError("Preencha todos os campos.");
       return;
     }
 
     try {
-      const response = await criarContaApi(usuario_id, nome, banco, tipo);
-      if (response) {
+        const response = await atualizarConta(conta.id, { nome, banco, tipo, usuario_id: usuarioId,});
+        console.log(response);
+        console.log(conta.id);
+
+        if (response) {
         setApiError("");
-        setNome("");
-        setBanco("");
-        setTipo("PESSOAL");
+        await onContaEditada();
         onClose();
-        onContaCriada();
-      } else {
-        Alert.alert("Erro", "Não foi possível cadastrar a conta.");
-      }
+        } else {
+        setApiError("Não foi possível atualizar a conta.");
+        }
     } catch (error) {
-      const errorMessage =
+        const errorMessage =
         typeof error === "string"
-          ? error
-          : error instanceof Error
-          ? error.message
-          : "Erro ao conectar com a API.";
-      setApiError(errorMessage);
+            ? error
+            : error instanceof Error
+            ? error.message
+            : "Erro ao conectar com a API.";
+        setApiError(errorMessage);
     }
   };
 
   return (
     <Modal isVisible={isVisible} onBackdropPress={onClose}>
       <View style={styles.modalContainer}>
-        <Title>Cadastrar Conta</Title>
+        <Title>Editar Conta</Title>
 
         <View style={{ alignSelf: "flex-start", width: "85%" }}>
-          <Text style={styles.textSmall}>Apelido da Conta:</Text>
+          <Text style={styles.textSmall}>Nome da Conta:</Text>
         </View>
         <InputText autoCapitalize="none" value={nome} onChangeText={setNome} />
 
         <View style={{ alignSelf: "flex-start", width: "85%" }}>
           <Text style={styles.textSmall}>Nome do Banco:</Text>
         </View>
-        <InputText autoCapitalize="none" value={banco} onChangeText={setBanco} />
+        <InputText
+          autoCapitalize="none"
+          value={banco}
+          onChangeText={setBanco}
+        />
 
         <View style={{ alignSelf: "flex-start", width: "85%" }}>
           <Text style={styles.textSmall}>Tipo da Conta:</Text>
         </View>
-
         <View style={styles.tipoContainer}>
           <TouchableOpacity
             style={[
@@ -97,7 +115,7 @@ const ModalContaCadastro: React.FC<ModalContaCadastroProps> = ({
 
         <ErrorMessage message={apiError || ""} />
 
-        <ButtonTextCenter title="Cadastrar" onPress={handleCadastro} />
+        <ButtonTextCenter title="Salvar" onPress={handleEditar} />
       </View>
     </Modal>
   );
@@ -110,13 +128,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
   },
-  tipoContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    width: "100%",
-    marginBottom: 10,
-    marginTop: 3,
-  },
   textSmall: {
     fontSize: 15,
     color: "#FFF",
@@ -124,6 +135,13 @@ const styles = StyleSheet.create({
     textAlign: "left",
     paddingLeft: 28,
     opacity: 0.8,
+  },
+  tipoContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%",
+    marginBottom: 10,
+    marginTop: 3,
   },
   button: {
     flex: 1,
@@ -152,4 +170,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ModalContaCadastro;
+export default ModalContaEdicao;

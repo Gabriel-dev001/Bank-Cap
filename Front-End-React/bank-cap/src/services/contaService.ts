@@ -1,4 +1,6 @@
 import { apiFetch } from "./api";
+import { apiPut } from "./api";
+
 
 export const buscarContasDoUsuario = async (usuario_id: string) => {
   try {
@@ -37,6 +39,33 @@ export const criarContaApi = async (
 
   return response;
 };
+
+export const atualizarConta = async (
+  id: string,
+  dados: { nome: string; banco: string; tipo: string; usuario_id: string }
+) => {
+  try {
+    // Fazendo a requisição PUT para atualizar a conta
+    const response = await apiPut(`/contas/${id}`, dados);
+
+    // Verificando se a resposta é válida
+    if (!response) {
+      throw new Error("Erro ao atualizar conta: sem resposta da API.");
+    }
+
+    // Adicionando log para verificar o conteúdo da resposta
+    console.log("Resposta da API:", response);
+
+    // Retorna a resposta da API, que deverá ser o objeto atualizado
+    return response;
+  } catch (error) {
+    // Captura e loga o erro
+    console.error("Erro ao atualizar conta:", error);
+    return null;
+  }
+};
+
+
 
 export const deletarConta = async (id: string) => {
   try {
