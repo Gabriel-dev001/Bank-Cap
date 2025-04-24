@@ -13,8 +13,7 @@ import DonutChart from "../../components/Start/DonutChart";
 import LineSeparator from "../../components/Start/LineSeparator";
 import ButtonTextCenter from "../../components/Commom/ButtonTextCenter";
 import FloatingButton from "../../components/Start/FloatingButton";
-import ModalConta from "../../components/Start/ModalConta"; 
-import ModalListaContas from "../../components/Start/ModalListaContas"; 
+import ModalListaContas from "../../components/Start/Modals/ModalListaContas"; 
 import { apiFetch } from "../../services/api";
 import { buscarContasDoUsuario } from "../../services/contaService";
 
@@ -49,7 +48,6 @@ interface Conta {
 
 const Start: React.FC<Props> = ({ route }) => {
   const [modalVisible, setModalVisible] = useState(false); 
-  const [modalVisivel, setModalVisivel] = useState(false);
   const [listaContas, setListaContas] = useState<Conta[]>([]);  
   const [dadosConta, setDadosConta] = useState<any>(null);
   const [contaSelecionadaId, setContaSelecionadaId] = useState<String | null>(null);
@@ -90,7 +88,10 @@ const Start: React.FC<Props> = ({ route }) => {
     >
       <View style={{ flex: 0, justifyContent: "flex-start", alignItems: "center", paddingTop: 120,}}>
       <TopBar title={`${dadosConta ? dadosConta.nome : "--"}`} />
-        <DonutChart />{/*Aqui eu vou ter que passar o tanto de receita e de despesa que eu tenho*/}
+        {/* <DonutChart saldo={dadosConta?.saldo || 0}/>Aqui eu vou ter que passar o tanto de receita e de despesa que eu tenho */}
+        <DonutChart saldoReal={dadosConta?.saldo ?? 0} despesas={1} />
+
+
       </View>
 
       <View style={StyleStart.container}>
@@ -129,7 +130,7 @@ const Start: React.FC<Props> = ({ route }) => {
         <Text style={{ color: "white" }}>Conta Selecionada: {contaSelecionadaId}</Text>
       
         {/* Botões redondos*/}
-        <FloatingButton/>
+        <FloatingButton idConta={dadosConta?.saldo}/>
 
       </View>
     </ImageBackground>

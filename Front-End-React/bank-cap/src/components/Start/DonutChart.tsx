@@ -3,13 +3,12 @@ import { View, Text, Dimensions } from "react-native";
 import { PieChart } from "react-native-chart-kit";
 
 interface DonutChartProps {
-  receitaTotal: number;
   despesas: number;
+  saldoReal: number;
 }
 
-const DonutChart: React.FC<DonutChartProps> = ({ receitaTotal = 0, despesas = 0 }) => {
-  const saldo = receitaTotal - despesas;
-  console.log(saldo)
+const DonutChart: React.FC<DonutChartProps> = ({  despesas , saldoReal }) => {
+  const saldo = saldoReal - despesas;
 
   const data = [
     {
@@ -60,7 +59,11 @@ const DonutChart: React.FC<DonutChartProps> = ({ receitaTotal = 0, despesas = 0 
             justifyContent: "center",
         }}
         >
+        <Text style={{ color: "white", fontSize: 15, fontWeight: "bold" }}>
+          Saldo:
+        </Text>
         <Text style={{ color: "white", fontSize: 18, fontWeight: "bold" }}>
+          {/* R$ {saldo.toFixed(2)} */}
           R$ {saldo.toFixed(2)}
         </Text>
       </View>
@@ -69,4 +72,4 @@ const DonutChart: React.FC<DonutChartProps> = ({ receitaTotal = 0, despesas = 0 
   );
 };
 
-export default () => <DonutChart receitaTotal={5000} despesas={3000} />;
+export default DonutChart;

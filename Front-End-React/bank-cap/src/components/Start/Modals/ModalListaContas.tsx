@@ -8,10 +8,10 @@ import {
 } from "react-native";
 import Modal from "react-native-modal";
 
-import ButtonTextCenter from "../../components/Commom/ButtonTextCenter";
-import ModalConta from "../../components/Start/ModalConta";
-import ModalContaEdicao from "../../components/Start/ModalContaEdicao";
-import { buscarContasDoUsuario, deletarConta } from "../../services/contaService";
+import ButtonTextCenter from "../../../components/Commom/ButtonTextCenter";
+import ModalConta from "../Modals/ModalConta";
+import ModalContaEdicao from "../Modals/ModalContaEdicao";
+import { buscarContasDoUsuario, deletarConta } from "../../../services/contaService";
 
 interface Conta {
   id: string;

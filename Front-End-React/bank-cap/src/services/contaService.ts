@@ -65,8 +65,6 @@ export const atualizarConta = async (
   }
 };
 
-
-
 export const deletarConta = async (id: string) => {
   try {
     const response = await apiFetch(`/contas/${id}`, "DELETE");

@@ -7,9 +7,15 @@ import {
   Image,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
+import ModalReceitaCadastro from "../Start/Modals/ModalReceitaCadastro";
 
-const FloatingButton = () => {
+type Props = {
+  idConta: string; 
+};
+
+const FloatingButton = ({ idConta }: Props) => {
   const [expanded, setExpanded] = useState(false);
+  const [modalReceitaVisible, setModalReceitaVisible] = useState(false);
   const animation = useRef(new Animated.Value(0)).current;
 
   const toggleMenu = () => {
@@ -70,18 +76,32 @@ const FloatingButton = () => {
     <View style={styles.container}>
       {/* Botão 1 - Receita */}
       <Animated.View style={[styles.subButton, button1Style]}>
-        <TouchableOpacity style={styles.secondaryButton}>
+        <TouchableOpacity
+          style={styles.secondaryButton}
+          onPress={() => setModalReceitaVisible(true)}
+        >
           <Image
-            source={require("../../assets/receita.png")} style={styles.icon}
+            source={require("../../assets/receita.png")}
+            style={styles.icon}
           />
         </TouchableOpacity>
       </Animated.View>
+
+      <ModalReceitaCadastro
+        isVisible={modalReceitaVisible}
+        onClose={() => setModalReceitaVisible(false)}
+        conta_id={idConta}
+        onReceitaCriada={() => {
+          setModalReceitaVisible(false);
+        }}
+      />
 
       {/* Botão 2 - Cripto */}
       <Animated.View style={[styles.subButton, button2Style]}>
         <TouchableOpacity style={styles.secondaryButton}>
           <Image
-            source={require("../../assets/cripto.png")} style={styles.icon}
+            source={require("../../assets/cripto.png")}
+            style={styles.icon}
           />
         </TouchableOpacity>
       </Animated.View>
@@ -90,7 +110,8 @@ const FloatingButton = () => {
       <Animated.View style={[styles.subButton, button3Style]}>
         <TouchableOpacity style={styles.secondaryButton}>
           <Image
-            source={require("../../assets/despesa.png")} style={styles.icon}
+            source={require("../../assets/despesa.png")}
+            style={styles.icon}
           />
         </TouchableOpacity>
       </Animated.View>
@@ -140,7 +161,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     width: 150, // Ajuste conforme necessário
-    height:130,
+    height: 130,
     resizeMode: "contain",
   },
   buttonText: {

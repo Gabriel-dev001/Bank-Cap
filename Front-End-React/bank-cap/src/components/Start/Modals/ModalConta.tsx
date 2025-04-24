@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { View, Text, Alert, StyleSheet, TouchableOpacity } from "react-native";
 import Modal from "react-native-modal";
-import Title from "../Commom/Title";
-import InputText from "../Commom/InputText";
-import ButtonTextCenter from "../Commom/ButtonTextCenter";
-import ErrorMessage from "../Commom/ErrorMessage";
-import { criarContaApi } from "../../services/contaService";
+import Title from "../../Commom/Title";
+import InputText from "../../Commom/InputText";
+import ButtonTextCenter from "../../Commom/ButtonTextCenter";
+import ErrorMessage from "../../Commom/ErrorMessage";
+import { criarContaApi } from "../../../services/contaService";
 
 interface ModalContaCadastroProps {
   isVisible: boolean;

@@ -30,17 +30,12 @@ export const apiPut = async (endpoint: string, body: any) => {
       body: JSON.stringify(body),
     });
 
-    // Verificando o status da resposta
-    console.log("Status da resposta PUT:", response.status);
-
-    // Se o status da resposta não for 2xx (OK), vamos capturar a mensagem de erro
     if (!response.ok) {
       const errorData = await response.text();
       console.warn("Erro na API PUT:", errorData);
       throw new Error(`Erro ao atualizar conta: ${errorData}`);
     }
 
-    // Verificando o tipo de resposta para garantir que é JSON
     const contentType = response.headers.get("content-type");
 
     if (contentType && contentType.includes("application/json")) {
@@ -49,12 +44,8 @@ export const apiPut = async (endpoint: string, body: any) => {
       return data;
     }
 
-    // Se a resposta não for JSON, retornar um objeto vazio
-    console.warn("A resposta não é do tipo JSON. Retornando um objeto vazio.");
     return {};
   } catch (error: any) {
-    // Log de erro e propagação
-    console.error("Erro na requisição PUT:", error.message);
-    throw error; // Lançamos o erro para que a função 'atualizarConta' possa tratá-lo adequadamente
+    throw error; 
   }
 };
