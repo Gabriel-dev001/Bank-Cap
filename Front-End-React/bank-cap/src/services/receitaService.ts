@@ -8,6 +8,7 @@ export const cadastrarReceitaApi = async (
     categoria: string,
     descricao: string
   ) => {
+  
     const receitaData = {
       conta_id,
       valor,

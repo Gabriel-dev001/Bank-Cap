@@ -1,11 +1,23 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  TouchableWithoutFeedback,
+  Keyboard,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import Modal from "react-native-modal";
+import { MaskedTextInput } from "react-native-mask-text";
 import InputText from "../../Commom/InputText";
 import ButtonTextCenter from "../../Commom/ButtonTextCenter";
 import ErrorMessage from "../../Commom/ErrorMessage";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import moment from "moment"; 
+import DropDownPicker from "react-native-dropdown-picker";
+import moment from "moment";
+
 import { cadastrarReceitaApi } from "../../../services/receitaService";
 
 interface ModalReceitaCadastroProps {
@@ -23,51 +35,76 @@ const ModalReceitaCadastro: React.FC<ModalReceitaCadastroProps> = ({
 }) => {
   const [valor, setValor] = useState("");
   const [data, setData] = useState("");
-  const [categoria, setCategoria] = useState("");
   const [descricao, setDescricao] = useState("");
   const [apiError, setApiError] = useState("");
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
+  // Select
+  const [open, setOpen] = useState(false);
+  const [categoria, setCategoria] = useState<string>("");
+  const [items, setItems] = useState([
+    { label: "Salário", value: "SALARIO" },
+    { label: "Renda Extra", value: "RENDA EXTRA" },
+    { label: "Vendas exporádicas", value: "VENDAS" },
+    { label: "Presente", value: "PRESENTE" },
+  ]);
+
+  const handleChange = (rawText: string) => {
+    // Aqui removemos a formatação antes de salvar o valor
+    // Substituindo vírgula por ponto e removendo qualquer coisa que não seja número
+    let numericValue = rawText.replace(/[^\d,]/g, "").replace(",", ".");
+
+    // Agora salvamos o valor com 2 casas decimais
+    // Isso garante que 5,02 seja tratado como 5.02 e não 502
+    const formattedValue = parseFloat(numericValue).toFixed(2);
+
+    setValor(formattedValue);
+  };
+
   const showDatePicker = () => {
-    setDatePickerVisibility(true); // Exibe o modal do DateTimePicker
+    setDatePickerVisibility(true);
   };
 
   const hideDatePicker = () => {
-    setDatePickerVisibility(false); // Oculta o modal do DateTimePicker
+    setDatePickerVisibility(false);
   };
 
   const handleConfirm = (date: Date) => {
-    setData(moment(date).format("DD-MM-YYYY")); // Formata a data no formato DD-MM-YYYY
+    setData(moment(date).format("YYYY-MM-DD"));
     hideDatePicker();
   };
 
   const handleCadastro = async () => {
-    if (!valor || !data || !categoria || !descricao) {
+    if (!descricao) {
       setApiError("Preencha todos os campos");
       return;
     }
 
     try {
       // Faça a chamada para a API aqui
-      // const response = await cadastrarReceitaApi({
-      //   conta_id,
-      //   valor: parseFloat(valor),
-      //   data,
-      //   categoria,
-      //   descricao,
-      // });
-
-      // if (response) {
-      //   setApiError("");
-      //   setValor("");
-      //   setData("");
-      //   setCategoria("");
-      //   setDescricao("");
-      //   onClose();
-      //   onReceitaCriada();
-      // } else {
-      //   Alert.alert("Erro", "Não foi possível cadastrar a receita.");
-      // }
+      const response = await cadastrarReceitaApi(
+        conta_id,
+        parseFloat(valor),
+        data,
+        categoria,
+        descricao
+      );
+      console.log(conta_id);
+      console.log(valor);
+      console.log(data);
+      console.log(categoria);
+      console.log(descricao);
+      if (response) {
+        setApiError("");
+        setValor("");
+        setData("");
+        setCategoria("");
+        setDescricao("");
+        onClose();
+        onReceitaCriada();
+      } else {
+        Alert.alert("Erro", "Não foi possível cadastrar a receita.");
+      }
     } catch (error) {
       const errorMessage =
         typeof error === "string"
@@ -81,33 +118,67 @@ const ModalReceitaCadastro: React.FC<ModalReceitaCadastroProps> = ({
 
   return (
     <Modal isVisible={isVisible} onBackdropPress={onClose}>
-      <View style={styles.modalContainer}>
-        <Text style={styles.title}>Cadastrar Receita</Text>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.modalContainer}>
+          <Text style={styles.title}>Cadastrar Receita</Text>
 
-        <InputLabel label="Valor (R$):" />
-        <InputText
-          keyboardType="numeric"
-          value={valor}
-          onChangeText={setValor}
-        />
-
-        <InputLabel label="Data (DD-MM-YYYY):" />
-        <TouchableOpacity onPress={showDatePicker}>
-          <InputText
-            value={data}
-            editable={false} // Desativa a edição manual
+          {/* Estou com bug aqui */}
+          <InputLabel label="Valor (R$):" />
+          <MaskedTextInput
+            type="currency"
+            options={{
+              prefix: "R$ ",
+              decimalSeparator: ",",
+              groupSeparator: ".",
+              precision: 2,
+            }}
+            keyboardType="numeric"
+            value={valor}
+            onChangeText={handleChange}
+            style={
+              styles.inputValor
+            }
           />
-        </TouchableOpacity>
 
-        <InputLabel label="Categoria:" />
-        <InputText value={categoria} onChangeText={setCategoria} />
 
-        <InputLabel label="Descrição:" />
-        <InputText value={descricao} onChangeText={setDescricao} />
+          <InputLabel label="Data:" />
+          {/* <Pressable onPress={showDatePicker} style={{ width: "100%" }}>
+            <InputText
+              value={data}
+              editable={false}
+              style={{ marginLeft: 20 }}
+            />
+          </Pressable> */}
+          <TouchableOpacity onPress={showDatePicker} style={{ width: "100%" }}>
+            <InputText
+              value={data}
+              editable={false}
+              style={{ marginLeft: 20 }}
+            />
+          </TouchableOpacity>
 
-        <ErrorMessage message={apiError || ""} />
-        <ButtonTextCenter title="Cadastrar" onPress={handleCadastro} />
-      </View>
+          <InputLabel label="Categoria:" />
+          <DropDownPicker
+            open={open}
+            value={categoria}
+            items={items}
+            setOpen={setOpen}
+            setValue={setCategoria}
+            setItems={setItems}
+            placeholder="Selecione uma categoria"
+            style={styles.input}
+            placeholderStyle={styles.placeholder}
+            dropDownContainerStyle={styles.dropDownContainerStyle}
+            textStyle={styles.placeholder}
+          />
+
+          <InputLabel label="Descrição:" />
+          <InputText value={descricao} onChangeText={setDescricao} />
+
+          <ErrorMessage message={apiError || ""} />
+          <ButtonTextCenter title="Cadastrar" onPress={handleCadastro} />
+        </View>
+      </TouchableWithoutFeedback>
 
       {/* Modal de seleção de data */}
       <DateTimePickerModal
@@ -115,6 +186,10 @@ const ModalReceitaCadastro: React.FC<ModalReceitaCadastroProps> = ({
         mode="date"
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}
+        themeVariant="light"
+        cancelTextIOS="Cancelar"
+        confirmTextIOS="Confirmar"
+        date={new Date()}
       />
     </Modal>
   );
@@ -147,6 +222,51 @@ const styles = StyleSheet.create({
     paddingLeft: 28,
     opacity: 0.8,
     marginTop: 8,
+  },
+  input: {
+    marginLeft: 20,
+    width: "85%",
+    height: 50,
+    backgroundColor: "rgb(0, 71, 187)", // Azul claro
+    borderRadius: 12,
+    marginTop: 2,
+    marginBottom: 10,
+    paddingHorizontal: 20,
+    fontSize: 15,
+    color: "#FFF",
+    fontWeight: "bold",
+    textAlign: "left",
+    borderWidth: 0.9,
+    borderColor: "#FFF",
+    opacity: 0.9,
+  },
+  inputValor: {
+    marginLeft: 10,
+    width: "85%",
+    height: 50,
+    backgroundColor: "rgb(0, 71, 187)", // Azul claro
+    borderRadius: 12,
+    marginTop: 2,
+    marginBottom: 10,
+    paddingHorizontal: 20,
+    fontSize: 15,
+    color: "#FFF",
+    fontWeight: "bold",
+    textAlign: "left",
+    borderWidth: 0.9,
+    borderColor: "#FFF",
+    opacity: 0.9,
+  },
+  dropDownContainerStyle: {
+    backgroundColor: "rgb(0, 71, 187)",
+    borderColor: "#FFF",
+  },
+  placeholder: {
+    fontSize: 12,
+    color: "#FFF",
+    fontWeight: "bold",
+    textAlign: "left",
+    opacity: 0.8,
   },
 });
 

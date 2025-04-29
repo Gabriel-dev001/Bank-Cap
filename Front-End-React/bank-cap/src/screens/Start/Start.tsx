@@ -50,7 +50,7 @@ const Start: React.FC<Props> = ({ route }) => {
   const [modalVisible, setModalVisible] = useState(false); 
   const [listaContas, setListaContas] = useState<Conta[]>([]);  
   const [dadosConta, setDadosConta] = useState<any>(null);
-  const [contaSelecionadaId, setContaSelecionadaId] = useState<String | null>(null);
+  const [contaSelecionadaId, setContaSelecionadaId] = useState<string | null>(null);
   const { userId } = route.params;
 
   const buscarDadosConta = async (id: string) => {
@@ -130,7 +130,7 @@ const Start: React.FC<Props> = ({ route }) => {
         <Text style={{ color: "white" }}>Conta Selecionada: {contaSelecionadaId}</Text>
       
         {/* Botões redondos*/}
-        <FloatingButton idConta={dadosConta?.saldo}/>
+        <FloatingButton idConta={contaSelecionadaId ?? ""}/>
 
       </View>
     </ImageBackground>
