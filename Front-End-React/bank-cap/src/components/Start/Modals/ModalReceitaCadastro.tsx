@@ -34,6 +34,7 @@ const ModalReceitaCadastro: React.FC<ModalReceitaCadastroProps> = ({
   onReceitaCriada,
 }) => {
   const [valor, setValor] = useState("");
+  const [valorRaw, setValorRaw] = useState("");
   const [data, setData] = useState("");
   const [descricao, setDescricao] = useState("");
   const [apiError, setApiError] = useState("");
@@ -49,16 +50,19 @@ const ModalReceitaCadastro: React.FC<ModalReceitaCadastroProps> = ({
     { label: "Presente", value: "PRESENTE" },
   ]);
 
-  const handleChange = (rawText: string) => {
-    // Aqui removemos a formatação antes de salvar o valor
-    // Substituindo vírgula por ponto e removendo qualquer coisa que não seja número
-    let numericValue = rawText.replace(/[^\d,]/g, "").replace(",", ".");
+  const formatCurrency = (text: string) => {
+    const cleaned = text.replace(/\D/g, ""); // remove tudo que não for número
+    const floatValue = (parseInt(cleaned || "0", 10) / 100).toFixed(2);
+    return `R$ ${floatValue.replace(".", ",")}`;
+  };
 
-    // Agora salvamos o valor com 2 casas decimais
-    // Isso garante que 5,02 seja tratado como 5.02 e não 502
-    const formattedValue = parseFloat(numericValue).toFixed(2);
-
-    setValor(formattedValue);
+  const handleChange = (text: string, rawText: string) => {
+    const cleaned = rawText.replace(/\D/g, ""); 
+    const floatValue = parseFloat(cleaned) / 100; 
+    const formatted = formatCurrency(rawText);
+  
+    setValor(formatted); 
+    setValorRaw(rawText); 
   };
 
   const showDatePicker = () => {
@@ -75,25 +79,24 @@ const ModalReceitaCadastro: React.FC<ModalReceitaCadastroProps> = ({
   };
 
   const handleCadastro = async () => {
-    if (!descricao) {
+    if (!descricao || !valorRaw || !data || !categoria) {
       setApiError("Preencha todos os campos");
       return;
     }
 
+    if (isNaN(parseFloat(valorRaw)) || !valorRaw) {
+      setApiError("Valor inválido.");
+      return;
+    }
+
     try {
-      // Faça a chamada para a API aqui
       const response = await cadastrarReceitaApi(
         conta_id,
-        parseFloat(valor),
+        parseFloat((parseInt(valorRaw || "0", 10) / 100).toFixed(2)),
         data,
         categoria,
         descricao
       );
-      console.log(conta_id);
-      console.log(valor);
-      console.log(data);
-      console.log(categoria);
-      console.log(descricao);
       if (response) {
         setApiError("");
         setValor("");
@@ -124,6 +127,7 @@ const ModalReceitaCadastro: React.FC<ModalReceitaCadastroProps> = ({
 
           {/* Estou com bug aqui */}
           <InputLabel label="Valor (R$):" />
+
           <MaskedTextInput
             type="currency"
             options={{
@@ -135,20 +139,11 @@ const ModalReceitaCadastro: React.FC<ModalReceitaCadastroProps> = ({
             keyboardType="numeric"
             value={valor}
             onChangeText={handleChange}
-            style={
-              styles.inputValor
-            }
+            placeholder="0,00"
+            style={styles.inputValor}
           />
 
-
           <InputLabel label="Data:" />
-          {/* <Pressable onPress={showDatePicker} style={{ width: "100%" }}>
-            <InputText
-              value={data}
-              editable={false}
-              style={{ marginLeft: 20 }}
-            />
-          </Pressable> */}
           <TouchableOpacity onPress={showDatePicker} style={{ width: "100%" }}>
             <InputText
               value={data}
@@ -241,7 +236,6 @@ const styles = StyleSheet.create({
     opacity: 0.9,
   },
   inputValor: {
-    marginLeft: 10,
     width: "85%",
     height: 50,
     backgroundColor: "rgb(0, 71, 187)", // Azul claro
@@ -267,6 +261,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "left",
     opacity: 0.8,
+  },
+  contaContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+    width: "100%",
   },
 });
 
