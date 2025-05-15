@@ -3,8 +3,8 @@
     "name": "bank-cap",
     "slug": "bank-cap",
     "version": "1.0.0",
+    "sdkVersion": "52.0.4",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
@@ -25,7 +25,8 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-font"
     ]
   }
 }
