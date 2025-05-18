@@ -50,3 +50,4 @@ class UsuarioRepository:
     def excluir(usuario):
         db.session.delete(usuario)
         db.session.commit()
+        

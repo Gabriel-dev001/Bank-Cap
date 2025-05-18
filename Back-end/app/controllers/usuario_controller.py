@@ -39,3 +39,4 @@ class UsuarioController:
     def excluir_usuario(usuario_id):
         resposta, status_code = UsuarioService.excluir_usuario(usuario_id)
         return jsonify(resposta), status_code
+    

@@ -31,11 +31,9 @@ class UsuarioService:
     
     @staticmethod
     def excluir_usuario(usuario_id):
-        usuario = UsuarioRepository.excluir(usuario_id)
+        usuario = UsuarioRepository.get_by_id_usuario(usuario_id)
         if not usuario:
-        
             return {"error": "Usuário não encontrado"}, 404
-        
-        UsuarioRepository.excluir(usuario)
+    
+        UsuarioRepository.excluir(usuario) 
         return {"message": "Usuário excluído com sucesso"}, 200
-
