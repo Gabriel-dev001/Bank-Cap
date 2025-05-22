@@ -1,6 +1,8 @@
 from flask import request, jsonify, Response
 import json
 from app.service.auth_service import AuthService
+from flask_jwt_extended import jwt_required, get_jwt_identity
+
 
 class AuthController:
     @staticmethod
@@ -26,6 +28,18 @@ class AuthController:
 
         return Response(json.dumps(usuario["usuario"], ensure_ascii=False), 
                         status=status_code, mimetype="application/json")
+        
+        
+    @staticmethod
+    # @jwt_required()
+    def trocar_senha(usuario_id):
+        data = request.get_json()
+
+        if not all(key in data for key in ("senha_atual", "nova_senha")):
+            return jsonify({"error": "Dados incompletos"}), 400
+
+        return AuthService.trocar_senha(usuario_id, data["senha_atual"], data["nova_senha"])
+    
     @staticmethod
     def login_com_google():
         data = request.get_json()
@@ -43,7 +57,6 @@ class AuthController:
             return jsonify({"error": "Dados incompletos"}), 400
 
         return AuthService.registrar_usuario_google(data["nome"], data["email"], data["google_id"])
-
 
     @staticmethod
     def callback_google():

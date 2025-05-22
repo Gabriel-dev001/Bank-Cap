@@ -25,6 +25,10 @@ class UsuarioRepository:
     def buscar_por_google_id(google_id):
         return Usuario.query.filter_by(google_id=google_id).first()
         
+    @staticmethod
+    def salvar_senha(usuario):
+        db.session.add(usuario)
+        db.session.commit()
     
     @staticmethod
     def get_usuarios():

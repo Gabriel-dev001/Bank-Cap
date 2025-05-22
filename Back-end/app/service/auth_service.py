@@ -4,6 +4,8 @@ from urllib.parse import urlencode
 from app.repository.usuario_repository import UsuarioRepository
 from flask_jwt_extended import create_access_token
 from datetime import timedelta
+from werkzeug.security import generate_password_hash
+
 
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
@@ -30,6 +32,35 @@ class AuthService:
 
         token = create_access_token(identity={"id": usuario.id, "email": usuario.email}, expires_delta=timedelta(hours=1))
         return {"id_usuario": usuario.id, "token": token}, 200
+    
+    # @staticmethod
+    # def trocar_senha(usuario_id, senha_atual, nova_senha):
+    #     usuario = UsuarioRepository.get_by_id_usuario(usuario_id)
+    #     if not usuario:
+    #         return {"error": "Usuário não encontrado"}, 404
+
+    #     if not usuario.verificar_senha(senha_atual):
+    #         return {"error": "Senha atual incorreta"}, 401
+
+    #     usuario.salvar_senha = generate_password_hash(nova_senha)
+    #     UsuarioRepository.salvar(usuario)
+
+    #     return {"message": "Senha alterada com sucesso"}, 200
+    
+    @staticmethod
+    def trocar_senha(usuario_id, senha_atual, nova_senha):
+        usuario = UsuarioRepository.get_by_id_usuario(usuario_id)
+        if not usuario:
+            return {"error": "Usuário não encontrado"}, 404
+
+        if not usuario.verificar_senha(senha_atual):
+            return {"error": "Senha atual incorreta"}, 401
+
+        usuario.senha = generate_password_hash(nova_senha)    
+            
+        UsuarioRepository.salvar_senha(usuario)
+
+        return {"message": "Senha alterada com sucesso"}, 200
     
     #Continuar com Google:
     @staticmethod
