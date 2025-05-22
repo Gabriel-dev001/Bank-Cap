@@ -74,3 +74,10 @@ class ContaService:
     @staticmethod
     def alterar_saldo(conta_id, valor):
         return ContaRepository.alterar_saldo(conta_id, valor)
+    
+    @staticmethod
+    def obter_saldo(conta_id):
+        conta = ContaRepository.get_by_id_conta(conta_id)
+        if not conta:
+            return None
+        return conta.saldo
