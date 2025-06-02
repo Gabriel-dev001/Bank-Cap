@@ -5,6 +5,8 @@ from app.service.conta_service import ContaService
 from decimal import Decimal
 from sqlalchemy.orm import joinedload
 
+from app.service.log_service import LogService
+
 
 class DespesaService:
     @staticmethod
@@ -22,6 +24,8 @@ class DespesaService:
 
         despesa_salva = DespesaRepository.criar_despesa(nova_despesa)
         ContaService.alterar_saldo(conta_id, valor)
+        
+        LogService.salvar_log(conta_id, f"Despesa na conta id: {conta_id} Criada")
 
         return despesa_salva.to_dict(), 201
     
@@ -62,6 +66,8 @@ class DespesaService:
         
         conta_id = despesa.conta.id  
         ContaService.alterar_saldo(conta_id, diferenca_valor)
+        
+        LogService.salvar_log(conta_id, f"Despesa id: {despesa_id} editada")
 
         return despesa_editada.to_dict(), 200
 
@@ -74,5 +80,7 @@ class DespesaService:
 
         valor, conta_id = result
         ContaService.alterar_saldo(conta_id, -Decimal(valor))
+        
+        LogService.salvar_log(conta_id, f"Despesa id: {despesa_id} excluida")
         
         return {"message": "Despesa excluída com sucesso"}, 200

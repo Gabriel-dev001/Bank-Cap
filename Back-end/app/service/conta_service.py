@@ -3,6 +3,8 @@ from app.repository.conta_repository import ContaRepository
 from app.models.conta_model import Conta
 from app.models.usuario_model import Usuario
 
+from app.service.log_service import LogService
+
 class ContaService:
     @staticmethod
     def criar_conta(usuario_id, nome, banco, tipo):
@@ -20,6 +22,9 @@ class ContaService:
             )
             
             conta_criada = ContaRepository.criar_conta(nova_conta)
+            
+            LogService.salvar_log(usuario_id, f"Conta Criada pelo usuario id: {usuario_id}")
+
             return conta_criada.to_dict(), 201
 
         except Exception as e:
@@ -60,6 +65,8 @@ class ContaService:
 
         ContaRepository.atualizar(conta)
         
+        LogService.salvar_log(usuario_id, f"Conta id: {conta_id} editada pelo usuario id: {usuario_id}")
+
         return conta.to_dict(), 200
     
     @staticmethod
@@ -69,6 +76,9 @@ class ContaService:
             return {"error": "Conta não encontrada"}, 404
 
         ContaRepository.deletar(conta)
+        
+        LogService.salvar_log(conta_id, f"Conta id: {conta_id} editada")
+        
         return {"message": "Conta deletada com sucesso"}, 200
     
     @staticmethod

@@ -5,6 +5,7 @@ from app.service.conta_service import ContaService
 from decimal import Decimal
 from sqlalchemy.orm import joinedload
 
+from app.service.log_service import LogService
 
 class ReceitaService:
     @staticmethod
@@ -19,6 +20,8 @@ class ReceitaService:
 
         receita_salva = ReceitaRepository.criar_receita(nova_receita)
         ContaService.alterar_saldo(conta_id, float(valor))
+        
+        LogService.salvar_log(conta_id, f"Receita na conta id: {conta_id} Criada")
 
         return receita_salva.to_dict(), 201
     
@@ -58,6 +61,8 @@ class ReceitaService:
         
         conta_id = receita.conta.id  
         ContaService.alterar_saldo(conta_id, diferenca_valor)
+        
+        LogService.salvar_log(conta_id, f"Receita id: {receita_id} editada")
 
         return receita_editada.to_dict(), 200
 
@@ -70,5 +75,7 @@ class ReceitaService:
 
         valor, conta_id = result
         ContaService.alterar_saldo(conta_id, -Decimal(valor))
+        
+        LogService.salvar_log(conta_id, f"Receita id: {receita_id} excluida")
         
         return {"message": "Receita excluída com sucesso"}, 200

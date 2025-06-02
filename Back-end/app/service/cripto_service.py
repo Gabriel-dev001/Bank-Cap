@@ -4,6 +4,8 @@ from app.service.conta_service import ContaService
 from decimal import Decimal
 import requests
 
+from app.service.log_service import LogService
+
 class CriptoService:
     @staticmethod
     def criar_cripto(data):
@@ -40,6 +42,9 @@ class CriptoService:
             valor_reais=valor_reais,
             valor_cripto=valor_cripto
         )
+        
+        LogService.salvar_log(conta_id, f"Cripto Adicionada na conta id: {conta_id}")
+
         return CriptoRepository.salvar(nova_cripto)
 
     @staticmethod
@@ -60,5 +65,7 @@ class CriptoService:
 
         valor_reais, conta_id = result
         ContaService.alterar_saldo(conta_id, float(valor_reais))
+        
+        LogService.salvar_log(conta_id, f"Cripto id: {cripto_id} excluida")
 
         return {"message": "Cripto excluída com sucesso"}, 200

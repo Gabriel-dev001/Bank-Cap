@@ -1,6 +1,8 @@
 from app.repository.usuario_repository import UsuarioRepository
 from werkzeug.security import generate_password_hash
 
+from app.service.log_service import LogService
+
 class UsuarioService:
     @staticmethod
     def get_usuarios():
@@ -10,8 +12,7 @@ class UsuarioService:
     @staticmethod
     def get_by_id_usuario(usuario_id):
         return UsuarioRepository.get_by_id_usuario(usuario_id)
-    
-    
+      
     @staticmethod
     def editar_usuario(usuario_id, nome=None, email=None, senha=None):
         usuario = UsuarioRepository.get_by_id_usuario(usuario_id)
@@ -27,6 +28,9 @@ class UsuarioService:
             dados_atualizados["senha"] = generate_password_hash(senha)
 
         usuario_atualizado = UsuarioRepository.editar_usuario(usuario_id, dados_atualizados)
+        
+        LogService.salvar_log(usuario_id, f"Usuário id: {usuario_id} editado")
+        
         return usuario_atualizado.to_dict(), 200
     
     @staticmethod
@@ -36,4 +40,7 @@ class UsuarioService:
             return {"error": "Usuário não encontrado"}, 404
     
         UsuarioRepository.excluir(usuario) 
+        
+        LogService.salvar_log(usuario_id, f"Usuário id: {usuario_id} Excluido")
+
         return {"message": "Usuário excluído com sucesso"}, 200
