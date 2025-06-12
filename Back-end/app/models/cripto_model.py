@@ -8,15 +8,15 @@ class Cripto(db.Model):
     nome = db.Column(db.String(100), nullable=False)
     valor_reais = db.Column(db.Numeric(10, 2), nullable=False)
     valor_cripto = db.Column(db.Numeric(30, 18), nullable=False)
-    criado_em = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp())
-
+    criado_em = db.Column(db.Date, nullable=False) 
     conta = db.relationship('Conta', backref=db.backref('criptos', lazy=True, cascade='all, delete-orphan'))
 
-    def __init__(self, conta_id, nome, valor_reais, valor_cripto):
+    def __init__(self, conta_id, nome, valor_reais, valor_cripto, criado_em):
         self.conta_id = conta_id
         self.nome = nome
         self.valor_reais = valor_reais
         self.valor_cripto = valor_cripto
+        self.criado_em = criado_em
 
     def to_dict(self):
         return {
