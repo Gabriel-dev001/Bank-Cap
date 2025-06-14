@@ -183,12 +183,10 @@ class RelatorioRepository:
         relatorio = []
         for t in transacoes:
             relatorio.append({
-                "id": t.id,
-                "conta_id": t.conta_id,
                 "nome": t.nome,
-                "valor_reais": float(t.valor_reais),
-                "valor_cripto": float(t.valor_cripto),
-                "criado_em": t.criado_em.strftime("%Y-%m-%d") if t.criado_em else None
+                "valor em reais": float(t.valor_reais),
+                "valor em cripto": float(t.valor_cripto),
+                "data da transação": t.criado_em.strftime("%Y-%m-%d") if t.criado_em else None
             })
 
         total_reais = sum([float(t.valor_reais) for t in transacoes])
@@ -196,8 +194,8 @@ class RelatorioRepository:
 
         relatorio.append({
             "tipo": "TOTAL",
-            "valor_reais": total_reais,
-            "valor_cripto": total_cripto
+            "valor em reais": total_reais,
+            "valor em cripto": total_cripto
         })
 
         return {"relatorio": relatorio} 
