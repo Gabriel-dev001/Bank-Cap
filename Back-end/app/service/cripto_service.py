@@ -47,6 +47,10 @@ class CriptoService:
             criado_em=criado_em
         )
         
+        # 5. Atualiza o saldo da conta
+        valor = -abs(float(valor_reais))
+        ContaService.alterar_saldo(conta_id, float(valor))
+
         LogService.salvar_log(conta_id, f"Cripto Adicionada na conta id: {conta_id}")
 
         return CriptoRepository.salvar(nova_cripto)
