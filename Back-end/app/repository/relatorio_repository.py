@@ -210,9 +210,9 @@ class RelatorioRepository:
         for t in transacoes:
             relatorio.append({
                 "nome": t.nome,
-                "valor em reais": formatar_dinheiro(float(t.valor_reais)),
-                "valor em cripto": f"{float(t.valor_cripto):,.8f}".replace(",", "X").replace(".", ",").replace("X", "."),
-                "data da transação": formatar_data(t.criado_em)
+                "valor reais": formatar_dinheiro(float(t.valor_reais)),
+                "valor cripto": f"{float(t.valor_cripto):,.8f}".replace(",", "X").replace(".", ",").replace("X", "."),
+                "data": formatar_data(t.criado_em)
             })
 
         total_reais = sum([float(t.valor_reais) for t in transacoes])
@@ -220,8 +220,8 @@ class RelatorioRepository:
 
         relatorio.append({
             "tipo": "TOTAL",
-            "valor em reais": formatar_dinheiro(total_reais),
-            "valor em cripto": f"{total_cripto:,.8f}".replace(",", "X").replace(".", ",").replace("X", ".")
+            "valor reais": formatar_dinheiro(total_reais),
+            "valor cripto": f"{total_cripto:,.8f}".replace(",", "X").replace(".", ",").replace("X", ".")
         })
 
         return {"relatorio": relatorio}
