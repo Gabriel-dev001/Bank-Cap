@@ -11,6 +11,18 @@ class CriptoRepository:
     @staticmethod
     def get_criptos_por_conta(conta_id):
         return Cripto.query.filter_by(conta_id=conta_id).all()
+    
+    @staticmethod
+    def obter_por_id(cripto_id):
+        return Cripto.query.get(cripto_id)
+
+    @staticmethod
+    def registrar_venda(cripto, valor_cripto_vendido, valor_reais_vendido):
+        cripto.vendido = True
+        cripto.valor_cripto_vendido = valor_cripto_vendido
+        cripto.valor_reais_vendido = valor_reais_vendido
+        db.session.commit()
+        return cripto
 
     @staticmethod
     def excluir_cripto(cripto_id):

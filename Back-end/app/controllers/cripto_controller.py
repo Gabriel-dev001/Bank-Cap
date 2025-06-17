@@ -13,6 +13,16 @@ class CriptoController:
             return jsonify({"erro": str(ve)}), 400
         except Exception as e:
             return jsonify({"erro": "Erro interno", "detalhes": str(e)}), 500
+        
+    @staticmethod
+    def vender_cripto(cripto_id):
+        try:
+            cripto = CriptoService.vender_cripto(cripto_id)
+            return jsonify(cripto.to_dict()), 200
+        except ValueError as ve:
+            return jsonify({"erro": str(ve)}), 400
+        except Exception as e:
+            return jsonify({"erro": "Erro interno", "detalhes": str(e)}), 500
     
     @staticmethod
     def get_criptos_por_conta(conta_id):
