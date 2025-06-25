@@ -61,7 +61,4 @@ class AuthController:
     @staticmethod
     def callback_google():
         # Aqui você pode implementar a lógica para lidar com o callback do Google, se necessário
-        return jsonify({"message": "Google login callback"})
-
-    
-    
+        return jsonify({"message": "Google login callback"})  

@@ -32,7 +32,7 @@ class AuthService:
         if not usuario or not usuario.verificar_senha(senha):
             return {"error": "Credenciais inválidas"}, 401
 
-        token = create_access_token(identity={"id": usuario.id, "email": usuario.email}, expires_delta=timedelta(hours=1))
+        token = create_access_token(identity=str(usuario.id), expires_delta=timedelta(hours=1))
         return {"id_usuario": usuario.id, "token": token}, 200
     
     @staticmethod

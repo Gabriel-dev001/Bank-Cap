@@ -1,9 +1,11 @@
 from flask import request, jsonify, Response
 import json
 from app.service.despesa_service import DespesaService
+from flask_jwt_extended import jwt_required
 
 class DespesaController:
     @staticmethod
+    @jwt_required()
     def criar_despesa():
         data = request.get_json()
 
@@ -31,6 +33,7 @@ class DespesaController:
         return Response(json.dumps(despesa, ensure_ascii=False), status=status, mimetype="application/json")
     
     @staticmethod
+    @jwt_required()
     def editar_despesa(despesa_id):
         data = request.get_json()
         if not all(k in data for k in ("valor", "data", "categoria")):
@@ -56,6 +59,7 @@ class DespesaController:
 
     
     @staticmethod
+    @jwt_required()
     def excluir_despesa(despesa_id):
         response, status = DespesaService.excluir_despesa(despesa_id)
         return jsonify(response), status

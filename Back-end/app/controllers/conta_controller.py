@@ -2,8 +2,11 @@ from flask import Blueprint, jsonify, request, Response
 import json
 from app.service.conta_service import ContaService
 
+from flask_jwt_extended import jwt_required
+
 class ContaController:
     @staticmethod
+    @jwt_required()
     def criar_conta():
         data = request.get_json()
         
@@ -36,6 +39,7 @@ class ContaController:
         return Response(json.dumps({"erro": "Conta não encontrado"}), status=404, mimetype="application/json")
 
     @staticmethod
+    @jwt_required()
     def editar_conta(conta_id):
         data = request.get_json()
         response, status_code = ContaService.editar_conta(conta_id, data)
@@ -49,6 +53,7 @@ class ContaController:
         return Response(json.dumps(contas, ensure_ascii=False), status=status, mimetype='application/json')
 
     @staticmethod
+    @jwt_required()
     def deletar_conta(conta_id):
         response, status_code = ContaService.deletar_conta(conta_id)
 

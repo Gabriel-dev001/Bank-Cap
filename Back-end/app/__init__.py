@@ -1,7 +1,10 @@
 from flask import Flask
+from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 from config import Config
 from extensions import db, jwt, migrate
+
+from flask import jsonify
 
 from app.routes.auth_routes import auth_bp
 from app.routes.usuario_routes import usuario_bp
@@ -13,6 +16,8 @@ from app.routes.relatorio_routes import relatorio_bp
 
 def create_app():
     app = Flask(__name__)
+    app.config["JWT_SECRET_KEY"] = "sua_chave_secreta"  
+    # print("JWT_SECRET_KEY:", app.config["JWT_SECRET_KEY"])
     CORS(app, resources={r"/*": {"origins": "*"}})
     app.config.from_object(Config)
 
