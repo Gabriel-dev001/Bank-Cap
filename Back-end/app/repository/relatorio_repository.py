@@ -187,7 +187,7 @@ class RelatorioRepository:
 
         resumo.append({"categoria": "TOTAL ENTRADAS", "tipo": formatar_dinheiro(total_entradas)})
         resumo.append({"categoria": "TOTAL SAIDAS", "tipo": formatar_dinheiro(total_saidas)})
-        resumo.append({"categoria": "SALDO FINAL", "tipo": formatar_dinheiro(total_entradas - total_saidas)})
+        resumo.append({"categoria": "SALDO FINAL", "tipo": formatar_dinheiro(total_entradas + total_saidas)})
 
         return {"relatorio": resumo}
 
